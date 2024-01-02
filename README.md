@@ -42,30 +42,30 @@ NGCBot
 ## 2、项目结构
 
 ```css
-├── Api_Server																# Api服务文件夹
-│   ├── Api_Main_Server.py										# Api服务类
-│   ├── SparkApi.py														# 星火模型文件
-├── Bot_Server																# 机器人主文件夹
-│   ├── Main_Server.py												# 主服务类
-├── Cache																			# 缓存文件夹
-│   ├── Cache_Main_Server.py									# 缓存文件类
-├── Config																		# 配置文件夹
-│   └── config.yaml														# 配置文件
-├── Db_Server																	# 数据库文件夹
-│   ├── Db_Main_Server.py											# 主数据库文件
-│   ├── Db_Point_Server.py										# 积分数据库文件
-├── NGCBot.assets															# README文件夹
-├── NGCBot.md																	# README
-├── OutPut																		# 消息输出文件夹
-│   ├── OutPut.py															# 消息输出文件
-├── Push_Server																# 自动推送文件夹
-│   ├── Push_Main_Server.py										# 自动推送文件
-├── Recv_Msg_Dispose													# 消息处理文件夹
-│   ├── Friend_Msg_Dispose.py									# 好友消息处理文件
-│   ├── Room_Msg_Dispose.py										# 群消息处理文件
-├── main.py																		# 启动文件
-├── requirements.txt												  # 安装库文件
-└── test.py																		# 测试文件
+├── Api_Server						# Api服务文件夹
+│   ├── Api_Main_Server.py			# Api服务类
+│   ├── SparkApi.py					# 星火模型文件
+├── Bot_Server						# 机器人主文件夹
+│   ├── Main_Server.py				# 主服务类
+├── Cache							# 缓存文件夹
+│   ├── Cache_Main_Server.py		# 缓存文件类
+├── Config							# 配置文件夹
+│   └── config.yaml					# 配置文件
+├── Db_Server						# 数据库文件夹
+│   ├── Db_Main_Server.py			# 主数据库文件
+│   ├── Db_Point_Server.py			# 积分数据库文件
+├── NGCBot.assets					# README文件夹
+├── NGCBot.md						# README
+├── OutPut							# 消息输出文件夹
+│   ├── OutPut.py					# 消息输出文件
+├── Push_Server						# 自动推送文件夹
+│   ├── Push_Main_Server.py			# 自动推送文件
+├── Recv_Msg_Dispose				# 消息处理文件夹
+│   ├── Friend_Msg_Dispose.py		# 好友消息处理文件
+│   ├── Room_Msg_Dispose.py			# 群消息处理文件
+├── main.py							# 启动文件
+├── requirements.txt				# 安装库文件
+└── test.py							# 测试文件
 ```
 
 ## 3、快速启动
