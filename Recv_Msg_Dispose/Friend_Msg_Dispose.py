@@ -27,8 +27,6 @@ class Friend_Msg_Dispose:
     def Msg_Dispose(self, msg):
         # 处理好友红包, 关键词进群, 好友Ai功能
         # 关键词进群
-        print('content.............', msg.content)
-        print('xml...........', msg.xml)
         rooms_id = self.Room_Key_Word.get(msg.content.strip())
         if rooms_id:
             Thread(target=self.Join_Room, name="关键词进群", args=(rooms_id, msg,)).start()
