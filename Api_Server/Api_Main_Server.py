@@ -120,7 +120,7 @@ class Api_Main_Server:
                 assistant_content = json_data['choices'][0]['message']['content']
                 self.messages.append({"role": "assistant", "content": f"{assistant_content}"})
                 if len(self.messages) == 15:
-                    self.messages = self.messages[0]
+                    self.messages = [{"role": "system", "content": f"{self.OpenAi_Initiating_Message}"}]
                 return assistant_content
             except Exception as e:
                 OutPut.outPut(f'[-]: AI对话接口出现错误，错误信息： {e}')
