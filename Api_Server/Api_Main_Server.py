@@ -301,9 +301,9 @@ class Api_Main_Server:
             with open(file=save_path, mode='wb') as pd:
                 pd.write(pic_data)
         except Exception as e:
-            msg = f'[-]: 摸鱼日记API接口出现错误，错误信息：{e}\n正在回调中... ...'
+            msg = f'[-]: 摸鱼日记API接口出现错误，错误信息：{e}'
             OutPut.outPut(msg)
-            save_path = self.get_fish()
+            return 
         OutPut.outPut(f'[+]: 摸鱼日记API接口调用成功！！！')
         return save_path
 
