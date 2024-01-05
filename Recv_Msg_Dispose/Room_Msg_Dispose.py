@@ -45,6 +45,7 @@ class Room_Msg_Dispose:
         self.Whois_Words = config['Function_Key_Word']['Whois_Word']
         self.Fish_Words = config['Function_Key_Word']['Fish_Word']
         self.Weather_Words = config['Function_Key_Word']['Weather_Word']
+        self.OilPrice_Words = config['Function_Key_Word']['OilPrice_Word']
         self.Dog_Words = config['Function_Key_Word']['Dog_Word']
         self.Constellation_Words = config['Function_Key_Word']['Constellation_Word']
         self.Dream_Words = config['Function_Key_Word']['Dream_Word']
@@ -201,6 +202,11 @@ class Room_Msg_Dispose:
             weather_msg = f'@{self.wcf.get_alias_in_chatroom(roomid=msg.roomid, wxid=msg.sender)}' + self.Ams.query_weather(
                 msg.content.strip())
             self.wcf.send_text(msg=weather_msg, receiver=msg.roomid, aters=msg.sender)
+        # 油价查询
+        elif self.judge_keyword(keyword=self.OilPrice_Words, msg=msg.content.strip(), list_bool=True, split_bool=True):
+            oilprice_msg = f'@{self.wcf.get_alias_in_chatroom(roomid=msg.roomid, wxid=msg.sender)}' + self.Ams.query_oilprice(
+                msg.content.strip())
+            self.wcf.send_text(msg=oilprice_msg, receiver=msg.roomid, aters=msg.sender)            
         # 舔狗日记
         elif self.judge_keyword(keyword=self.Dog_Words, msg=msg.content.strip(), list_bool=True, equal_bool=True):
             dog_msg = f'@{self.wcf.get_alias_in_chatroom(roomid=msg.roomid, wxid=msg.sender)}' + self.Ams.get_dog()
@@ -316,9 +322,9 @@ class Room_Msg_Dispose:
         if ' ' in content:
             num = content.split(' ')[-1]
         if not num:
-            send_msg = f"[爱心] ———— NGCBot功能菜单 ———— [爱心]\n[庆祝]【一、积分功能】\n[庆祝]【1.1】、微步威胁IP查询\n[庆祝]【1.2】、端口查询\n[庆祝]【1.3】、MD5查询[烟花]\n[庆祝]【1.4】、Ai对话(Gpt&星火模型&千帆模型)\n\n可在群内发送信息【WHOIS查询 qq.com】不需要@本Bot哦\n\n[烟花]【二、娱乐功能】\n" \
+            send_msg = f"[爱心] ———— 怪盗Bot功能菜单 ———— [爱心]\n[庆祝]【一、积分功能】\n[庆祝]【1.1】、微步威胁IP查询\n[庆祝]【1.2】、端口查询\n[庆祝]【1.3】、MD5查询[烟花]\n[庆祝]【1.4】、Ai对话(Gpt&星火模型&千帆模型)\n\n可在群内发送信息【WHOIS查询 qq.com】不需要@本Bot哦\n\n[烟花]【二、娱乐功能】\n" \
                        f"[烟花]【2.1】、美女图片\n[烟花]【2.2】、美女视频\n[烟花]【2.3】、舔狗日记\n[烟花]【2.4】、摸鱼日历\n[烟花]【2.5】、星座查询\n[庆祝]【2.6】、KFC伤感文案\n[庆祝]【2.7】、手机号归属地查询\n[庆祝]【2.8】、WHOIS信息查询\n" \
-                       f"[烟花]【2.9】、备案查询\n\n您可以在群内发送消息【查询运势 白羊座】进行查询【其它功能类似】，或@本Bot进行AI对话哦\n\n需要调出帮助菜单，回复【帮助菜单】即可\n" \
+                       f"[烟花]【2.9】、备案查询\n[烟花]【3.0】、天气查询\n[烟花]【3.1】、油价查询\n[烟花]【3.2】、周公解梦\n\n您可以在群内发送消息【查询运势 白羊座】进行查询【其它功能类似】，或@本Bot进行AI对话哦\n\n需要调出帮助菜单，回复【help】即可\n" \
                        f"回复【help 2.1】可获取相应功能帮助[跳跳]，其它功能帮助以此类推[爱心]\n" \
                        f"{'By #' + self.system_copyright if self.system_copyright else ''}"
         elif num == '1.1':
@@ -347,6 +353,12 @@ class Room_Msg_Dispose:
             send_msg = '[烟花]【2.8】、WHOIS信息查询功能帮助\n\n[爱心]命令：【whois查询 qq.com】'
         elif num == '2.9':
             send_msg = '[烟花]【2.9】、备案查询功能帮助\n\n[爱心]命令：【icp查询 qq.com】'
+        elif num == '3.0':
+            send_msg = '[烟花]【3.0】、天气查询功能帮助\n\n[爱心]命令：【天气查询 上海】'
+        elif num == '3.1':
+            send_msg = '[烟花]【3.1】、油价查询功能帮助\n\n[爱心]命令：【油价查询 上海】'
+        elif num == '3.2':
+            send_msg = '[烟花]【3.2】、周公解梦功能帮助\n\n[爱心]命令：【解梦 淹死】'
         self.wcf.send_text(msg=send_msg, receiver=msg.roomid)
 
     # Ai对话

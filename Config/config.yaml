@@ -200,6 +200,10 @@ Function_Key_Word:
   Weather_Word:
     - '天气查询'
     - '查询天气'
+  # 触发油价查询关键词
+  OilPrice_Word:
+    - '油价查询'
+    - '查询油价'  
   # 触发舔狗日记关键词
   Dog_Word:
     - '舔狗日记'
@@ -294,6 +298,8 @@ Api_Server:
 
   # 天气查询API
   Weather_Api: 'https://apis.tianapi.com/tianqi/index?key={}&city={}&type=1'
+  # 油价查询API
+  OilPrice_Api: 'https://apis.tianapi.com/oilprice/index?key={}&prov={}'
   # 舔狗日记API
   Dog_Api: 'https://apis.tianapi.com/tiangou/index?key={}'
   # 星座查询API

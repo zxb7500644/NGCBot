@@ -53,6 +53,7 @@ class Api_Main_Server:
         self.Fish_Api = config['Api_Server']['Fish_Api']
         self.Kfc_Api = config['Api_Server']['Kfc_Api']
         self.Weather_Api = config['Api_Server']['Weather_Api']
+        self.OilPrice_Api = config['Api_Server']['OilPrice_Api']
         self.Dog_Api = config['Api_Server']['Dog_Api']
         self.Morning_Api = config['Api_Server']['Morning_Api']
         self.Constellation_Api = config['Api_Server']['Constellation_Api']
@@ -235,6 +236,30 @@ class Api_Main_Server:
             msg = f'[-]: 天气查询API接口出现错误，错误信息：{e}'
             OutPut.outPut(msg)
             return msg
+        
+    # 油价查询接口
+    def query_oilprice(self, content):
+        OutPut.outPut(f'[*]: 正在调用油价查询接口... ...')
+        prov = content.split(' ')[-1]
+        try:
+            json_data = requests.get(url=self.OilPrice_Api.format(self.Key, prov), verify=False).json()
+            # alarm_msg = ''
+            if json_data['code'] == 200:
+                data = json_data['result']
+                # if data['alarmlist']:
+                #     alarm_lists = data['alarmlist']
+                #     for alarm in alarm_lists:
+                #         alarm_msg += f'{alarm["content"]}\n'
+                #msg = f'\n今日{data["weather"]}天：{data["week"]}\n日期：{data["date"]}\n当前温度：{data["real"]}\n最低温度：{data["lowest"]}\n风向：{data["wind"] + data["windsc"]}\n风速：{data["windspeed"]}\n日出：{data["sunrise"]}\n日落：{data["sunset"]}\n降水量：{data["pcpn"]}\n空气质量：{data["quality"]}\n天气预警：{alarm_msg if alarm_msg else "无"}\n{"By: #" + self.system_copyright if self.system_copyright else ""}'
+                msg = f'\n今日{data["prov"]}油价：\np0：{data["p0"]}\np89：{data["p89"]}\np92：{data["p92"]}\np95：{data["p95"]}\np98：{data["p98"]}\n日期：{data["time"]}\n{"By: #" + self.system_copyright if self.system_copyright else ""}'
+                return msg
+            OutPut.outPut(f'[+]: 油价查询API接口调用成功！！！')
+            if json_data['code'] != 200:
+                return '查询失败, 请重试 ~~~~~~'
+        except Exception as e:
+            msg = f'[-]: 油价查询API接口出现错误，错误信息：{e}'
+            OutPut.outPut(msg)
+            return msg        
 
     # 舔狗日记
     def get_dog(self):
