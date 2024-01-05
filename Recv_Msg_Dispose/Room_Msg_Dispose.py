@@ -369,7 +369,7 @@ class Room_Msg_Dispose:
         if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
             admin_msg = f'@{wx_name}\n您是尊贵的管理员/超级管理员，本次对话不扣除积分'
             self.wcf.send_text(msg=admin_msg, receiver=msg.roomid, aters=msg.sender)
-            use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=self.handle_atMsg(msg, at_user_lists=at_user_lists,wx_id=msg.sender))
+            use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)
             self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
         # 不是管理员
         else:
