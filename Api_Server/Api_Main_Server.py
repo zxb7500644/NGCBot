@@ -113,8 +113,8 @@ class Api_Main_Server:
         def getGpt(content,wx_id):
             self.messages.append({"role": "user", "content": f'{content}'})
             data = {
-                # "model": "gpt-3.5-turbo",
-                "model": "claude-2",
+                "model": "gpt-3.5-turbo",
+                # "model": "claude-2",
                 "messages": self.messages,
                 "session_id":f'{wx_id}',
                 "seeion_limit":5
