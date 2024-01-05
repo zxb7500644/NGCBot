@@ -369,7 +369,7 @@ class Room_Msg_Dispose:
         if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
             admin_msg = f'@{wx_name}\n您是尊贵的管理员/超级管理员，本次对话不扣除积分'
             self.wcf.send_text(msg=admin_msg, receiver=msg.roomid, aters=msg.sender)
-            use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=self.handle_atMsg(msg, at_user_lists=at_user_lists))
+            use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=self.handle_atMsg(msg, at_user_lists=at_user_lists,wx_id=msg.sender))
             self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
         # 不是管理员
         else:
@@ -382,7 +382,7 @@ class Room_Msg_Dispose:
                 point_msg = f'@{wx_name} 您使用了Ai对话功能，扣除您 {self.Ai_Point} 点积分,\n当前剩余积分: {now_point}'
                 self.wcf.send_text(msg=point_msg, receiver=msg.roomid, aters=msg.sender)
                 use_msg = f'@{wx_name}\n' + self.Ams.get_ai(
-                    question=self.handle_atMsg(msg, at_user_lists=at_user_lists))
+                    question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)
                 self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
             else:
                 send_msg = f'@{wx_name} 积分不足, 请求管理员或其它群友给你施舍点'

@@ -85,7 +85,7 @@ class Api_Main_Server:
             OutPut.outPut(f'[-]: 千帆模型未配置，请修改配置文件已启用模型！！！')
 
     # Ai功能
-    def get_ai(self, question):
+    def get_ai(self, question,wx_id):
         OutPut.outPut("[*]: 正在调用Ai对话接口... ...")
         send_msgs = []
 
@@ -110,11 +110,13 @@ class Api_Main_Server:
             return text
 
         # Gpt模型
-        def getGpt(content):
+        def getGpt(content,wx_id):
             self.messages.append({"role": "user", "content": f'{content}'})
             data = {
                 "model": "gpt-3.5-turbo",
-                "messages": self.messages
+                "messages": self.messages,
+                "session_id":f'{wx_id}',
+                "seeion_limit":5
             }
             headers = {
                 "Content-Type": "application/json",
@@ -163,7 +165,7 @@ class Api_Main_Server:
                 OutPut.outPut(f'[-]: 千帆大模型出现错误，错误信息: {e}')
                 return None
 
-        gpt_msg = getGpt(content=question)
+        gpt_msg = getGpt(content=question,wx_id=wx_id)
         if gpt_msg:
             OutPut.outPut('[+]: Ai对话接口调用成功！！！')
             return gpt_msg
