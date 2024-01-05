@@ -297,9 +297,14 @@ class Api_Main_Server:
         OutPut.outPut(f'[*]: 正在调用摸鱼日记接口... ...')
         save_path = self.Cache_path + '/Fish_Cache/' + str(int(time.time() * 1000)) + '.jpg'
         try:
-            pic_data = requests.get(url=self.Fish_Api, headers=self.headers, timeout=30, verify=False).content
+            #pic_data = requests.get(url=self.Fish_Api, headers=self.headers, timeout=30, verify=False).content
+            pic_data = requests.get(url=self.Fish_Api, headers=self.headers, timeout=30, verify=False)
+            json_data = pic_data.json()
+            img_url = json_data['data'] 
+            img_data = requests.get(img_url, headers=self.headers, timeout=30, verify=False).content
+            # 保存图像数据到文件
             with open(file=save_path, mode='wb') as pd:
-                pd.write(pic_data)
+                pd.write(img_data)
         except Exception as e:
             msg = f'[-]: 摸鱼日记API接口出现错误，错误信息：{e}'
             OutPut.outPut(msg)
