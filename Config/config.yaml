@@ -115,7 +115,7 @@ Point_Config:
   # 签到功能
   Sign:
     # 签到口令
-    Word: '签到'
+    Word: '摸鱼啦'
     # 签到积分
     Point: '10'
   # 功能积分配置
