@@ -51,6 +51,7 @@ class Room_Msg_Dispose:
         self.Dream_Words = config['Function_Key_Word']['Dream_Word']
         self.ThreatBook_Words = config['Function_Key_Word']['ThreatBook_Word']
         self.Morning_Words = config['Function_Key_Word']['Morning_Word']
+        self.MoYu_Words = config['Function_Key_Word']['MoYu_Word']
         self.Morning_Page_Words = config['Function_Key_Word']['Morning_Page_Word']
         self.Evening_Page_Words = config['Function_Key_Word']['Evening_Page_Word']
         self.Custom_Key_Words = config['Custom_KeyWord']
@@ -257,6 +258,9 @@ class Room_Msg_Dispose:
         # help帮助菜单
         elif self.judge_keyword(keyword=self.HelpMenu_Words, msg=msg.content.strip(), list_bool=True, split_bool=True):
             Thread(target=self.get_help, name="Help帮助菜单", args=(msg,)).start()
+        # 摸鱼英雄榜    
+        elif self.judge_keyword(keyword=self.MoYu_Words, msg=msg.content.strip(), list_bool=True, split_bool=True):
+            Thread(target=self.get_MoYu, name="摸鱼英雄榜", args=(msg,)).start()
         # 自定义回复
         Thread(target=self.custom_get, name="自定义回复", args=(msg,)).start()
 
@@ -313,6 +317,11 @@ class Room_Msg_Dispose:
                         msg=f'@{self.wcf.get_alias_in_chatroom(wxid=msg.sender, roomid=msg.roomid)} {key}',
                         receiver=msg.roomid, aters=msg.sender)
                     return
+    # 摸鱼英雄榜
+    def get_MoYu(self,msg):
+        OutPut.outPut(f'[*]: 正在调用摸鱼英雄榜... ...')
+        send_msg = "/pkc xxtj d1"
+        self.wcf.send_text(msg=send_msg, receiver=msg.roomid)
 
     # 帮助菜单
     def get_help(self, msg):

@@ -2,6 +2,7 @@ from Api_Server.Api_Main_Server import Api_Main_Server
 from Cache.Cache_Main_Server import Cache_Main_Server
 from Db_Server.Db_Point_Server import Db_Point_Server
 from Db_Server.Db_Main_Server import Db_Main_Server
+# from Recv_Msg_Dispose.Room_Msg_Dispose import Room_Msg_Dispose
 from OutPut import OutPut
 import datetime
 import schedule
@@ -16,6 +17,7 @@ class Push_Main_Server:
         config = yaml.load(open(current_path + '/../Config/config.yaml', encoding='UTF-8'), yaml.Loader)
         self.db_file = current_path + '/../Config/Point_db.db'
         self.Ams = Api_Main_Server(wcf=self.wcf)
+        # self.Rom = Room_Msg_Dispose(wcf=self.wcf)
         self.Dms = Db_Main_Server(wcf=self.wcf)
         self.Cms = Cache_Main_Server(wcf=self.wcf)
         self.Dps = Db_Point_Server()
@@ -29,6 +31,7 @@ class Push_Main_Server:
         self.Evening_Page_Time = config['Push_Config']['Evening_Page_Time']
         self.Off_Work_Time = config['Push_Config']['Off_Work_Time']
         self.Fish_Time = config['Push_Config']['Fish_Time']
+        self.MoYu_Time = config['Push_Config']['MoYu_Time']
         self.Kfc_Time = config['Push_Config']['Kfc_Time']
 
     # 早安寄语推送
@@ -39,6 +42,15 @@ class Push_Main_Server:
         for room_id in room_dicts.keys():
             self.wcf.send_text(msg=msg, receiver=room_id)
         OutPut.outPut('[+]: 定时早安寄语推送成功！！！')
+
+    # 摸鱼英雄帮推送
+    def push_moyuyingxiong_msg(self):
+        OutPut.outPut('[*]: 定时摸鱼英雄榜推送中... ...')
+        msg = "/pkc xxtj d1"
+        room_dicts = self.Dms.show_push_rooms()
+        for room_id in room_dicts.keys():
+            self.wcf.send_text(msg=msg, receiver=room_id)
+        OutPut.outPut('[+]: 定时摸鱼英雄榜推送成功！！！')        
 
     # 早报推送
     def push_morning_page(self):
@@ -101,6 +113,7 @@ class Push_Main_Server:
         # schedule.every().day.at(self.Morning_Push_Time).do(self.push_morning_msg)
         # schedule.every().day.at(self.Morning_Page_Tome).do(self.push_morning_page)
         schedule.every().day.at(self.Fish_Time).do(self.push_fish)
+        schedule.every().day.at(self.MoYu_Time).do(self.push_moyuyingxiong_msg)
         schedule.every().thursday.at(self.Kfc_Time).do(self.push_kfc)
         # schedule.every().day.at(self.Evening_Page_Time).do(self.push_evening_page)
         # schedule.every().day.at(self.Off_Work_Time).do(self.push_off_work)
