@@ -259,7 +259,7 @@ class Room_Msg_Dispose:
         elif self.judge_keyword(keyword=self.HelpMenu_Words, msg=msg.content.strip(), list_bool=True, split_bool=True):
             Thread(target=self.get_help, name="Help帮助菜单", args=(msg,)).start()
         # 摸鱼英雄榜    
-        elif self.judge_keyword(keyword=self.MoYu_Words, msg=msg.content.strip(), list_bool=True, split_bool=True):
+        elif self.judge_keyword(keyword=self.MoYu_Words, msg=msg.content.strip(), list_bool=True, equal_bool=True):
             Thread(target=self.get_MoYu, name="摸鱼英雄榜", args=(msg,)).start()
         # 自定义回复
         Thread(target=self.custom_get, name="自定义回复", args=(msg,)).start()
