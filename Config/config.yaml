@@ -222,9 +222,9 @@ Function_Key_Word:
     - '早上好'
     - '早'
   # 触发摸鱼英雄榜
-  MoYu_Word:
-    - '摸鱼英雄榜'
-    - '摸鱼英雄'    
+  # MoYu_Word:
+  #   - '摸鱼英雄榜'
+  #   - '摸鱼英雄'    
   # 触发微步IP查询关键词
   ThreatBook_Word:
     - 'ip查询'
