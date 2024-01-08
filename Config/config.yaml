@@ -119,15 +119,15 @@ Point_Config:
     # 签到口令
     Word: '摸鱼啦'
     # 签到积分
-    Point: '10'
+    Point: '100'
   # 功能积分配置
   Function_Point:
     # Md5积分配置
-    Md5: '10'
+    Md5: '0'
     # IP查询积分配置
-    IP: '10'
+    IP: '0'
     # 端口查询积分配置
-    Port_Scan: '10'
+    Port_Scan: '0'
     # Ai对话积分配置
     Ai_point: '10'
   # 增加积分关键词
