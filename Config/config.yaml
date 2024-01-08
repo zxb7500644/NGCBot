@@ -20,7 +20,7 @@ Push_Config:
   # 下班推送时间设置
   Off_Work_Time: '18:00'
   # 摸鱼日记推送时间设置
-  Fish_Time: '10:00'
+  Fish_Time: '09:00'
   # 摸鱼英雄榜推送时间设置
   MoYu_Time: '23:58'  
   # KFC文案发送时间设置 每周四发送
