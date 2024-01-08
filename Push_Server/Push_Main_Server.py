@@ -114,17 +114,17 @@ class Push_Main_Server:
         # schedule.every().day.at(self.Morning_Page_Tome).do(self.push_morning_page)
         # schedule.every().monday.to().friday.at(self.Fish_Time).do(self.push_fish)
         
-        # schedule.every().monday.at(self.Fish_Time).do(self.push_fish)
-        # schedule.every().tuesday.at(self.Fish_Time).do(self.push_fish)
-        # schedule.every().wednesday.at(self.Fish_Time).do(self.push_fish)
-        # schedule.every().thursday.at(self.Fish_Time).do(self.push_fish)
-        # schedule.every().friday.at(self.Fish_Time).do(self.push_fish)
-        # schedule.every().thursday.at(self.Kfc_Time).do(self.push_kfc)
+        schedule.every().monday.at(self.Fish_Time).do(self.push_fish)
+        schedule.every().tuesday.at(self.Fish_Time).do(self.push_fish)
+        schedule.every().wednesday.at(self.Fish_Time).do(self.push_fish)
+        schedule.every().thursday.at(self.Fish_Time).do(self.push_fish)
+        schedule.every().friday.at(self.Fish_Time).do(self.push_fish)
+        schedule.every().thursday.at(self.Kfc_Time).do(self.push_kfc)
         
         
-        schedule.every(60).seconds.do(self.push_kfc)
-        schedule.every(70).seconds.do(self.push_fish)
-        schedule.every(80).seconds.do(self.push_off_work)
+        # schedule.every(60).seconds.do(self.push_kfc)
+        # schedule.every(70).seconds.do(self.push_fish)
+        # schedule.every(80).seconds.do(self.push_off_work)
         
         
         
@@ -133,15 +133,15 @@ class Push_Main_Server:
         # schedule.every().day.at(self.Off_Work_Time).do(self.push_off_work)
         # schedule.every().monday.to().friday.at(self.Off_Work_Time).do(self.push_off_work)
         
-        # schedule.every().monday.at(self.Fish_Time).do(self.push_off_work)
-        # schedule.every().tuesday.at(self.Fish_Time).do(self.push_off_work)
-        # schedule.every().wednesday.at(self.Fish_Time).do(self.push_off_work)
-        # schedule.every().thursday.at(self.Fish_Time).do(self.push_off_work)
-        # schedule.every().friday.at(self.Fish_Time).do(self.push_off_work)
+        schedule.every().monday.at(self.Fish_Time).do(self.push_off_work)
+        schedule.every().tuesday.at(self.Fish_Time).do(self.push_off_work)
+        schedule.every().wednesday.at(self.Fish_Time).do(self.push_off_work)
+        schedule.every().thursday.at(self.Fish_Time).do(self.push_off_work)
+        schedule.every().friday.at(self.Fish_Time).do(self.push_off_work)
         
-        # schedule.every().day.at('00:00').do(self.clear_sign)
-        # schedule.every().day.at('03:00').do(self.clear_cache)
-        schedule.every(60).seconds.do(self.clear_sign)
+        schedule.every().day.at('00:00').do(self.clear_sign)
+        schedule.every().day.at('03:00').do(self.clear_cache)
+        # schedule.every(60).seconds.do(self.clear_sign)
         OutPut.outPut(f'[+]: 已开启定时推送服务！！！')
         while True:
             schedule.run_pending()
