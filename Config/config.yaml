@@ -286,9 +286,9 @@ Api_Server:
     # OpenAi
     Open_Ai:
       # Open_Ai接口
-      OpenAi_Api: 'https://api.aiproxy.io/v1/chat/completions'
+      OpenAi_Api: 'https://apivip.aiproxy.io/v1/chat/completions'
       # OpenAi Key
-      OpenAi_Key: 'Bearer sk-KjgVWy8iWmKegEzgW77u25SLBpdP2IeWlYtxZFTE5MLlqb5N'
+      OpenAi_Key: 'Bearer sk-nUjCjv6aExgHzmBgw44tTv8hm3EqbJQfFa94rj8JH9Jhphk9'
       # 初始化OpenAi角色
       OpenAi_Role: '你叫GDKIDBot, 是一名资深计算机专家和生活小能手,精通各种编程语言以及各种生活小技巧，你的主人是怪盗'
     # 千帆大模型
