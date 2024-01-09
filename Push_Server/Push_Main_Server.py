@@ -119,6 +119,7 @@ class Push_Main_Server:
         schedule.every().wednesday.at(self.Fish_Time).do(self.push_fish)
         schedule.every().thursday.at(self.Fish_Time).do(self.push_fish)
         schedule.every().friday.at(self.Fish_Time).do(self.push_fish)
+        
         schedule.every().thursday.at(self.Kfc_Time).do(self.push_kfc)
         
         
@@ -133,11 +134,11 @@ class Push_Main_Server:
         # schedule.every().day.at(self.Off_Work_Time).do(self.push_off_work)
         # schedule.every().monday.to().friday.at(self.Off_Work_Time).do(self.push_off_work)
         
-        schedule.every().monday.at(self.Fish_Time).do(self.push_off_work)
-        schedule.every().tuesday.at(self.Fish_Time).do(self.push_off_work)
-        schedule.every().wednesday.at(self.Fish_Time).do(self.push_off_work)
-        schedule.every().thursday.at(self.Fish_Time).do(self.push_off_work)
-        schedule.every().friday.at(self.Fish_Time).do(self.push_off_work)
+        schedule.every().monday.at(self.Off_Work_Time).do(self.push_off_work)
+        schedule.every().tuesday.at(self.Off_Work_Time).do(self.push_off_work)
+        schedule.every().wednesday.at(self.Off_Work_Time).do(self.push_off_work)
+        schedule.every().thursday.at(self.Off_Work_Time).do(self.push_off_work)
+        schedule.every().friday.at(self.Off_Work_Time).do(self.push_off_work)
         
         schedule.every().day.at('00:00').do(self.clear_sign)
         schedule.every().day.at('03:00').do(self.clear_cache)
