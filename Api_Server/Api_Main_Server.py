@@ -51,6 +51,11 @@ class Api_Main_Server:
         self.Attribution_Api = config['Api_Server']['Attribution_Api']
         self.Whois_Api = config['Api_Server']['Whois_Api']
         self.Fish_Api = config['Api_Server']['Fish_Api']
+        self.BaGua_Api = config['Api_Server']['BaGua_Api']
+        self.DuanZi_Api = config['Api_Server']['DuanZi_Api']
+        self.JianBao_Api = config['Api_Server']['JianBao_Api']
+        self.QingGan_Api = config['Api_Server']['QingGan_Api']
+        self.XingZuo_Api = config['Api_Server']['XingZuo_Api']
         self.Kfc_Api = config['Api_Server']['Kfc_Api']
         self.Weather_Api = config['Api_Server']['Weather_Api']
         self.OilPrice_Api = config['Api_Server']['OilPrice_Api']
@@ -338,6 +343,101 @@ class Api_Main_Server:
             OutPut.outPut(msg)
             return 
         OutPut.outPut(f'[+]: 摸鱼日记API接口调用成功！！！')
+        return save_path
+
+    # 明星八卦
+    def get_BaGua(self):
+        OutPut.outPut(f'[*]: 正在调用明星八卦接口... ...')
+        save_path = self.Cache_path + '/Fish_Cache/' + str(int(time.time() * 1000)) + '.jpg'
+        try:
+            pic_data = requests.get(url=self.BaGua_Api, headers=self.headers, timeout=30, verify=False)
+            json_data = pic_data.json()
+            img_url = json_data['data'] 
+            img_data = requests.get(img_url, headers=self.headers, timeout=30, verify=False).content
+            # 保存图像数据到文件
+            with open(file=save_path, mode='wb') as pd:
+                pd.write(img_data)
+        except Exception as e:
+            msg = f'[-]: 明星八卦API接口出现错误，错误信息：{e}'
+            OutPut.outPut(msg)
+            return 
+        OutPut.outPut(f'[+]: 明星八卦API接口调用成功！！！')
+        return save_path
+
+    # 内涵段子
+    def get_DuanZi(self):
+        OutPut.outPut(f'[*]: 正在调用内涵段子接口... ...')
+        save_path = self.Cache_path + '/Fish_Cache/' + str(int(time.time() * 1000)) + '.jpg'
+        try:
+            pic_data = requests.get(url=self.DuanZi_Api, headers=self.headers, timeout=30, verify=False)
+            json_data = pic_data.json()
+            img_url = json_data['data'] 
+            img_data = requests.get(img_url, headers=self.headers, timeout=30, verify=False).content
+            # 保存图像数据到文件
+            with open(file=save_path, mode='wb') as pd:
+                pd.write(img_data)
+        except Exception as e:
+            msg = f'[-]: 内涵段子API接口出现错误，错误信息：{e}'
+            OutPut.outPut(msg)
+            return 
+        OutPut.outPut(f'[+]: 内涵段子API接口调用成功！！！')
+        return save_path 
+
+    # 新闻简报
+    def get_JianBao(self):
+        OutPut.outPut(f'[*]: 正在调用新闻简报接口... ...')
+        save_path = self.Cache_path + '/Fish_Cache/' + str(int(time.time() * 1000)) + '.jpg'
+        try:
+            pic_data = requests.get(url=self.JianBao_Api, headers=self.headers, timeout=30, verify=False)
+            json_data = pic_data.json()
+            img_url = json_data['data'] 
+            img_data = requests.get(img_url, headers=self.headers, timeout=30, verify=False).content
+            # 保存图像数据到文件
+            with open(file=save_path, mode='wb') as pd:
+                pd.write(img_data)
+        except Exception as e:
+            msg = f'[-]: 新闻简报API接口出现错误，错误信息：{e}'
+            OutPut.outPut(msg)
+            return 
+        OutPut.outPut(f'[+]: 新闻简报API接口调用成功！！！')
+        return save_path               
+
+    # 情感花园
+    def get_QingGan(self):
+        OutPut.outPut(f'[*]: 正在调用情感花园接口... ...')
+        save_path = self.Cache_path + '/Fish_Cache/' + str(int(time.time() * 1000)) + '.jpg'
+        try:
+            pic_data = requests.get(url=self.QingGan_Api, headers=self.headers, timeout=30, verify=False)
+            json_data = pic_data.json()
+            img_url = json_data['data'] 
+            img_data = requests.get(img_url, headers=self.headers, timeout=30, verify=False).content
+            # 保存图像数据到文件
+            with open(file=save_path, mode='wb') as pd:
+                pd.write(img_data)
+        except Exception as e:
+            msg = f'[-]: 情感花园API接口出现错误，错误信息：{e}'
+            OutPut.outPut(msg)
+            return 
+        OutPut.outPut(f'[+]: 情感花园API接口调用成功！！！')
+        return save_path
+
+    # 星座运势
+    def get_XingZuo(self):
+        OutPut.outPut(f'[*]: 正在调用星座运势接口... ...')
+        save_path = self.Cache_path + '/Fish_Cache/' + str(int(time.time() * 1000)) + '.jpg'
+        try:
+            pic_data = requests.get(url=self.XingZuo_Api, headers=self.headers, timeout=30, verify=False)
+            json_data = pic_data.json()
+            img_url = json_data['data'] 
+            img_data = requests.get(img_url, headers=self.headers, timeout=30, verify=False).content
+            # 保存图像数据到文件
+            with open(file=save_path, mode='wb') as pd:
+                pd.write(img_data)
+        except Exception as e:
+            msg = f'[-]: 星座运势API接口出现错误，错误信息：{e}'
+            OutPut.outPut(msg)
+            return 
+        OutPut.outPut(f'[+]: 星座运势API接口调用成功！！！')
         return save_path
 
     # Whois查询

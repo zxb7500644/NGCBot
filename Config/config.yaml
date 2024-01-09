@@ -223,7 +223,22 @@ Function_Key_Word:
     - '早'
   # 触发摸鱼英雄榜
   MoYu_Word:
-    - 'khkjhkjh'    
+    - 'khkjhkjh' 
+  # 触发明星八卦
+  BaGua_Word:
+    - '明星八卦'
+  # 触发内涵段子
+  DuanZi_Word:
+    - '内涵段子'
+  # 触发新闻简报
+  JianBao_Word:
+    - '新闻简报' 
+  # 触发情感花园
+  QingGan_Word:
+    - '情感花园'
+  # 触发星座运势
+  XingZuo_Word:
+    - '星座运势'                      
   # 触发微步IP查询关键词
   ThreatBook_Word:
     - 'ip查询'
@@ -318,6 +333,16 @@ Api_Server:
 
   # 摸鱼日记API
   Fish_Api: 'https://dayu.qqsuu.cn/moyuribao/apis.php?type=json'
+  # 明星八卦API
+  BaGua_Api: 'https://dayu.qqsuu.cn/mingxingbagua/apis.php?type=json'  
+  # 内涵段子API
+  DuanZi_Api: 'https://dayu.qqsuu.cn/neihanduanzi/apis.php?type=json'
+  # 新闻简报API
+  JianBao_Api: 'https://dayu.qqsuu.cn/weiyujianbao/apis.php?type=json' 
+  # 情感花园API
+  QingGan_Api: 'https://dayu.qqsuu.cn/qingganhuayuan/apis.php?type=json' 
+  # 星座运势API
+  XingZuo_Api: 'https://dayu.qqsuu.cn/xingzuoyunshi/apis.php?type=json'          
   # 疯狂星期四文案Api
   Kfc_Api: 'https://api.pearktrue.cn/api/kfc'
   # Whois查询API

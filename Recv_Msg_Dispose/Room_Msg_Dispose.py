@@ -44,6 +44,11 @@ class Room_Msg_Dispose:
         self.Kfc_Words = config['Function_Key_Word']['Kfc_Word']
         self.Whois_Words = config['Function_Key_Word']['Whois_Word']
         self.Fish_Words = config['Function_Key_Word']['Fish_Word']
+        self.BaGua_Words = config['Function_Key_Word']['BaGua_Word']
+        self.DuanZi_Words = config['Function_Key_Word']['DuanZi_Word']
+        self.JianBao_Words = config['Function_Key_Word']['JianBao_Word']
+        self.QingGan_Words = config['Function_Key_Word']['QingGan_Word']
+        self.XingZuo_Words = config['Function_Key_Word']['XingZuo_Word']
         self.Weather_Words = config['Function_Key_Word']['Weather_Word']
         self.OilPrice_Words = config['Function_Key_Word']['OilPrice_Word']
         self.Dog_Words = config['Function_Key_Word']['Dog_Word']
@@ -229,6 +234,41 @@ class Room_Msg_Dispose:
                 self.wcf.send_image(path=save_path, receiver=msg.roomid)
             else:
                 self.wcf.send_text(msg='摸鱼日记接口出错, 错误信息请查看日志 ~~~~~~', receiver=msg.roomid)
+        # 明星八卦
+        elif self.judge_keyword(keyword=self.BaGua_Words, msg=msg.content.strip(), list_bool=True, equal_bool=True):
+            save_path = self.Ams.get_BaGua()
+            if 'Fish_Cache' in save_path:
+                self.wcf.send_image(path=save_path, receiver=msg.roomid)
+            else:
+                self.wcf.send_text(msg='明星八卦接口出错, 错误信息请查看日志 ~~~~~~', receiver=msg.roomid)
+        # 内涵段子
+        elif self.judge_keyword(keyword=self.DuanZi_Words, msg=msg.content.strip(), list_bool=True, equal_bool=True):
+            save_path = self.Ams.get_DuanZi()
+            if 'Fish_Cache' in save_path:
+                self.wcf.send_image(path=save_path, receiver=msg.roomid)
+            else:
+                self.wcf.send_text(msg='内涵段子接口出错, 错误信息请查看日志 ~~~~~~', receiver=msg.roomid)
+        # 新闻简报
+        elif self.judge_keyword(keyword=self.JianBao_Words, msg=msg.content.strip(), list_bool=True, equal_bool=True):
+            save_path = self.Ams.get_JianBao()
+            if 'Fish_Cache' in save_path:
+                self.wcf.send_image(path=save_path, receiver=msg.roomid)
+            else:
+                self.wcf.send_text(msg='新闻简报接口出错, 错误信息请查看日志 ~~~~~~', receiver=msg.roomid)
+        # 情感花园
+        elif self.judge_keyword(keyword=self.QingGan_Words, msg=msg.content.strip(), list_bool=True, equal_bool=True):
+            save_path = self.Ams.get_QingGan()
+            if 'Fish_Cache' in save_path:
+                self.wcf.send_image(path=save_path, receiver=msg.roomid)
+            else:
+                self.wcf.send_text(msg='情感花园接口出错, 错误信息请查看日志 ~~~~~~', receiver=msg.roomid)  
+        # 星座运势
+        elif self.judge_keyword(keyword=self.XingZuo_Words, msg=msg.content.strip(), list_bool=True, equal_bool=True):
+            save_path = self.Ams.get_XingZuo()
+            if 'Fish_Cache' in save_path:
+                self.wcf.send_image(path=save_path, receiver=msg.roomid)
+            else:
+                self.wcf.send_text(msg='星座运势接口出错, 错误信息请查看日志 ~~~~~~', receiver=msg.roomid)                              
         # Whois查询
         elif self.judge_keyword(keyword=self.Whois_Words, msg=msg.content.strip(), list_bool=True, split_bool=True):
             whois_msg = f'@{self.wcf.get_alias_in_chatroom(roomid=msg.roomid, wxid=msg.sender)}\n' + self.Ams.get_whois(
@@ -333,7 +373,7 @@ class Room_Msg_Dispose:
         if not num:
             send_msg = f"[爱心] ———— 怪盗Bot功能菜单 ———— [爱心]\n[庆祝]【一、积分功能】\n[庆祝]【1.1】、微步威胁IP查询\n[庆祝]【1.2】、端口查询\n[庆祝]【1.3】、MD5查询[烟花]\n[庆祝]【1.4】、Ai对话(Gpt&星火模型&千帆模型)\n\n可在群内发送信息【WHOIS查询 qq.com】不需要@本Bot哦\n\n[烟花]【二、娱乐功能】\n" \
                        f"[烟花]【2.1】、美女图片\n[烟花]【2.2】、美女视频\n[烟花]【2.3】、舔狗日记\n[烟花]【2.4】、摸鱼日历\n[烟花]【2.5】、星座查询\n[庆祝]【2.6】、KFC伤感文案\n[庆祝]【2.7】、手机号归属地查询\n[庆祝]【2.8】、WHOIS信息查询\n" \
-                       f"[烟花]【2.9】、备案查询\n[烟花]【3.0】、天气查询\n[烟花]【3.1】、油价查询\n[烟花]【3.2】、周公解梦\n\n您可以在群内发送消息【查询运势 白羊座】进行查询【其它功能类似】，或@本Bot进行AI对话哦\n\n需要调出帮助菜单，回复【help】即可\n" \
+                       f"[烟花]【2.9】、备案查询\n[烟花]【3.0】、天气查询\n[烟花]【3.1】、油价查询\n[烟花]【3.2】、周公解梦\n[烟花]【3.3】、明星八卦\n[烟花]【3.4】、内涵段子\n[烟花]【3.5】、新闻简报\n[烟花]【3.6】、情感花园\n[烟花]【3.7】、星座运势\n\n您可以在群内发送消息【查询运势 白羊座】进行查询【其它功能类似】，或@本Bot进行AI对话哦\n\n需要调出帮助菜单，回复【help】即可\n" \
                        f"回复【help 2.1】可获取相应功能帮助[跳跳]，其它功能帮助以此类推[爱心]\n" \
                        f"{'By #' + self.system_copyright if self.system_copyright else ''}"
         elif num == '1.1':
@@ -368,6 +408,16 @@ class Room_Msg_Dispose:
             send_msg = '[烟花]【3.1】、油价查询功能帮助\n\n[爱心]命令：【油价查询 上海】'
         elif num == '3.2':
             send_msg = '[烟花]【3.2】、周公解梦功能帮助\n\n[爱心]命令：【解梦 淹死】'
+        elif num == '3.3':
+            send_msg = '[烟花]【3.3】、明星八卦功能帮助\n\n[爱心]命令：【明星八卦】'
+        elif num == '3.4':
+            send_msg = '[烟花]【3.4】、内涵段子功能帮助\n\n[爱心]命令：【内涵段子】'
+        elif num == '3.5':
+            send_msg = '[烟花]【3.5】、新闻简报功能帮助\n\n[爱心]命令：【新闻简报】'
+        elif num == '3.6':
+            send_msg = '[烟花]【3.6】、情感花园功能帮助\n\n[爱心]命令：【情感花园】'
+        elif num == '3.7':
+            send_msg = '[烟花]【3.7】、星座运势功能帮助\n\n[爱心]命令：【星座运势】'                                                            
         self.wcf.send_text(msg=send_msg, receiver=msg.roomid)
 
     # Ai对话
