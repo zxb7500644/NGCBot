@@ -382,9 +382,9 @@ Api_Server:
     # - 'https://api.8uid.cn/tm.php?type=video'
     # - 'https://api.8uid.cn/dd.php?type=video'
     # - 'http://lx.linxi.icu/API/xjj.php'
-    - 'https://tucdn.wpon.cn/api-girl/index.php'
+    # - 'https://tucdn.wpon.cn/api-girl/index.php'
     # - 'https://v.api.aa1.cn/api/api-dy-girl/index.php?aa1=ajdu987hrjfw'
-    # - 'https://v.api.aa1.cn/api/api-video-gaoxiao/index.php?aa1=rf7y8w5yf79u8hwf4'
+    - 'https://v.api.aa1.cn/api/api-video-gaoxiao/index.php?aa1=rf7y8w5yf79u8hwf4'
     # - 'https://v.api.aa1.cn/api/api-video-qinglvduihua/index.php?aa1=wwwaa1cn7yf58hyirjow8c5u'
 
 
