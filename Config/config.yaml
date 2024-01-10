@@ -20,7 +20,7 @@ Push_Config:
   # 下班推送时间设置
   Off_Work_Time: '18:00'
   # 摸鱼日记推送时间设置
-  Fish_Time: '09:00'
+  Fish_Time: '09:30'
   # 摸鱼英雄榜推送时间设置
   MoYu_Time: '23:58'  
   # KFC文案发送时间设置 每周四发送
@@ -372,16 +372,20 @@ Api_Server:
     - 'http://lx.linxi.icu/API/meitui.php'
   # 视频API配置
   Video_Api:
-    - 'http://api.yujn.cn/api/heisis.php'
-    - 'http://api.yujn.cn/api/xjj.php'
-    - 'http://api.yujn.cn/api/zzxjj.php'
-    - 'https://api.yujn.cn/api/manzhan.php'
-    - 'http://lx.linxi.icu/API/xjj.php'
-    - 'https://api.8uid.cn/qc.php?type=video'
-    - 'https://api.8uid.cn/cd.php?type=video'
-    - 'https://api.8uid.cn/tm.php?type=video'
-    - 'https://api.8uid.cn/dd.php?type=video'
-    - 'http://lx.linxi.icu/API/xjj.php'
+    # - 'http://api.yujn.cn/api/heisis.php'
+    # - 'http://api.yujn.cn/api/xjj.php'
+    # - 'http://api.yujn.cn/api/zzxjj.php'
+    # - 'https://api.yujn.cn/api/manzhan.php'
+    # - 'http://lx.linxi.icu/API/xjj.php'
+    # - 'https://api.8uid.cn/qc.php?type=video'
+    # - 'https://api.8uid.cn/cd.php?type=video'
+    # - 'https://api.8uid.cn/tm.php?type=video'
+    # - 'https://api.8uid.cn/dd.php?type=video'
+    # - 'http://lx.linxi.icu/API/xjj.php'
+    - 'https://tucdn.wpon.cn/api-girl/index.php'
+    - 'https://v.api.aa1.cn/api/api-dy-girl/index.php?aa1=ajdu987hrjfw'
+    - 'https://v.api.aa1.cn/api/api-video-gaoxiao/index.php?aa1=rf7y8w5yf79u8hwf4'
+    - 'https://v.api.aa1.cn/api/api-video-qinglvduihua/index.php?aa1=wwwaa1cn7yf58hyirjow8c5u'
 
 
 
