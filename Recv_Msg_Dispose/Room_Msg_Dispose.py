@@ -432,8 +432,12 @@ class Room_Msg_Dispose:
                 #admin_msg = f'@{wx_name}\n您是尊贵的管理员/超级管理员，本次对话不扣除积分'
                 #self.wcf.send_text(msg=admin_msg, receiver=msg.roomid, aters=msg.sender)
                 save_path =  self.Ams.get_aidraw(question=self.handle_atMsg(msg, at_user_lists=at_user_lists))
-                if 'Pic_Cache' in save_path:
+                # if 'Pic_Cache' in save_path:
+                if os.path.exists(save_path):
                     self.wcf.send_image(path=save_path, receiver=msg.roomid)
+                else:
+                    use_msg = f'@{wx_name}\n' + 'Ai绘图失败'
+                    self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
             else:
                 if self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name) >= int(
                         self.AiDraw_Point):
@@ -445,8 +449,12 @@ class Room_Msg_Dispose:
                     self.wcf.send_text(msg=point_msg, receiver=msg.roomid, aters=msg.sender)
                     
                     save_path =  self.Ams.get_aidraw(question=self.handle_atMsg(msg, at_user_lists=at_user_lists))
-                    if 'Pic_Cache' in save_path:
-                        self.wcf.send_image(path=save_path, receiver=msg.roomid)                    
+                    # if 'Pic_Cache' in save_path:
+                    if os.path.exists(save_path):                       
+                        self.wcf.send_image(path=save_path, receiver=msg.roomid)
+                    else:
+                        use_msg = f'@{wx_name}\n' + 'Ai绘图失败'
+                        self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)                    
                 else:
                     send_msg = f'@{wx_name} 积分不足, 请求管理员或其它群友给你施舍点'
                     self.wcf.send_text(msg=send_msg, receiver=msg.roomid, aters=msg.sender)    

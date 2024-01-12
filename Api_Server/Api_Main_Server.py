@@ -120,12 +120,30 @@ class Api_Main_Server:
                 if r.status_code == 200:
                     save_path = self.Cache_path + '/Pic_Cache/' + str(int(time.time() * 1000)) + '.png'                   
                     img_url = j.get('data')[0].get('url')
-                    # img_prompt = j.get('data')[0].get('revised_prompt')                  
-                    img_content = httpx.get(url=img_url,
-                                timeout=180).content
-                    with open(file=save_path, mode='wb') as pd:
-                        pd.write(img_content)
-                    return save_path   
+                    # img_prompt = j.get('data')[0].get('revised_prompt')
+                    max_retries = 3 
+                    for attempt in range(1, max_retries + 1):
+                        try:
+                            img_content = httpx.get(url=img_url, timeout=180).content
+                            with open(file=save_path, mode='wb') as pd:
+                                pd.write(img_content)
+
+                            if os.path.exists(save_path):
+                                OutPut.outPut('图片下载成功')
+                                return save_path                                  
+                        except Exception as e:
+                            if attempt < max_retries:
+                                OutPut.outPut('图片下载失败等待5s重试')                               
+                                # 等待一段时间后重试
+                                time.sleep(5)  # 适当的等待时间
+                            else:
+                                OutPut.outPut('图片下载失败')
+                                                
+                    # img_content = httpx.get(url=img_url,
+                    #             timeout=180).content
+                    # with open(file=save_path, mode='wb') as pd:
+                    #     pd.write(img_content)
+                    # return save_path   
                 else:
                     OutPut.outPut(f'[-]: AI绘图接口出现错误，返回信息500： {e}')
                     return None         
