@@ -130,6 +130,8 @@ Point_Config:
     Port_Scan: '0'
     # Ai对话积分配置
     Ai_point: '10'
+    # Ai画图积分配置
+    AiDraw_point: '50'
   # 增加积分关键词
   Add_Point_Word:
     - '加'
@@ -302,6 +304,8 @@ Api_Server:
     Open_Ai:
       # Open_Ai接口
       OpenAi_Api: 'https://apivip.aiproxy.io/v1/chat/completions'
+      # Open_AiDraw接口
+      OpenAiDraw_Api: 'https://apivip.aiproxy.io/v1/images/generations'
       # OpenAi Key
       OpenAi_Key: 'Bearer sk-nUjCjv6aExgHzmBgw44tTv8hm3EqbJQfFa94rj8JH9Jhphk9'
       # 初始化OpenAi角色

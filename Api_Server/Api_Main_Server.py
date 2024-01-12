@@ -11,6 +11,7 @@ import random
 import yaml
 import time
 import os
+import httpx
 
 
 class Api_Main_Server:
@@ -75,6 +76,7 @@ class Api_Main_Server:
         self.Spark_Appid = config['Api_Server']['Ai_Config']['SparkApi']['Appid']
         # OpenAi配置
         self.OpenAi_Api = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAi_Api']
+        self.OpenAiDraw_Api = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAiDraw_Api']
         self.OpenAi_Key = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAi_Key']
         self.OpenAi_Initiating_Message = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAi_Role']
         self.messages = [{"role": "system", "content": f"{self.OpenAi_Initiating_Message}"}]
@@ -90,6 +92,53 @@ class Api_Main_Server:
             OutPut.outPut(f'[-]: 千帆模型未配置，请修改配置文件已启用模型！！！')
 
     # Ai功能
+    def get_aidraw(self,question):
+        OutPut.outPut("[*]: 正在调用Ai绘图接口... ...")
+        
+        def getGptDraw(content):
+            promptTemp =  f'{content}'
+            promptReal = promptTemp.replace('画', '').strip()
+            prompt = promptReal.strip()
+            size = "1024x1024"
+            quality = "standard"
+            json = {
+                "model": "dall-e-3",
+                "prompt": prompt,
+                "n": 1,
+                "size": size,
+                "quality": quality
+            }
+            try:
+                r = httpx.post(url=self.OpenAiDraw_Api,
+                            headers={
+                                "Content-Type": "application/json",
+                                "Authorization": f"{self.OpenAi_Key}"
+                            },
+                            json=json,
+                            timeout=300)     
+                j = r.json()
+                if r.status_code == 200:
+                    save_path = self.Cache_path + '/Pic_Cache/' + str(int(time.time() * 1000)) + '.png'                   
+                    img_url = j.get('data')[0].get('url')
+                    # img_prompt = j.get('data')[0].get('revised_prompt')                  
+                    img_content = httpx.get(url=img_url,
+                                timeout=180).content
+                    with open(file=save_path, mode='wb') as pd:
+                        pd.write(img_content)
+                    return save_path   
+                else:
+                    OutPut.outPut(f'[-]: AI绘图接口出现错误，返回信息500： {e}')
+                    return None         
+            except Exception as e:
+                OutPut.outPut(f'[-]: AI绘图接口出现错误，错误信息： {e}')
+                self.messages = [{"role": "system", "content": f"{self.OpenAi_Initiating_Message}"}]
+                return None
+        
+        gpt_image = getGptDraw(content=question)
+        if gpt_image:
+            OutPut.outPut('[+]: Ai绘图接口调用成功！！！')
+            return gpt_image
+
     def get_ai(self, question,wx_id):
         OutPut.outPut("[*]: 正在调用Ai对话接口... ...")
         send_msgs = []

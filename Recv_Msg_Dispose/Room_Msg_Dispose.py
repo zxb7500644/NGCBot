@@ -72,6 +72,7 @@ class Room_Msg_Dispose:
         self.Md5_Point = config['Point_Config']['Function_Point']['Md5']
         self.Ip_Point = config['Point_Config']['Function_Point']['IP']
         self.Ai_Point = config['Point_Config']['Function_Point']['Ai_point']
+        self.AiDraw_Point = config['Point_Config']['Function_Point']['AiDraw_point']
         self.Port_Scan_Point = config['Point_Config']['Function_Point']['Port_Scan']
 
     # 主消息处理
@@ -425,27 +426,52 @@ class Room_Msg_Dispose:
         admin_dicts = self.Dms.show_admins(wx_id=msg.sender, room_id=msg.roomid)
         room_name = self.Dms.query_room_name(room_id=msg.roomid)
         wx_name = self.wcf.get_alias_in_chatroom(wxid=msg.sender, roomid=msg.roomid)
-        if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
-            #admin_msg = f'@{wx_name}\n您是尊贵的管理员/超级管理员，本次对话不扣除积分'
-            #self.wcf.send_text(msg=admin_msg, receiver=msg.roomid, aters=msg.sender)
-            use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)
-            self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
-        # 不是管理员
-        else:
-            if self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name) >= int(
-                    self.Ai_Point):
-                self.Dps.del_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,
-                                   point=int(self.Ai_Point))
-                # now_point = self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid,
-                #                                  room_name=room_name, )
-                #point_msg = f'@{wx_name} 您使用了Ai对话功能，扣除您 {self.Ai_Point} 点积分,\n当前剩余积分: {now_point}'
-                #self.wcf.send_text(msg=point_msg, receiver=msg.roomid, aters=msg.sender)
-                use_msg = f'@{wx_name}\n' + self.Ams.get_ai(
-                    question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)
-                self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
+        content = self.handle_atMsg(msg, at_user_lists=at_user_lists)
+        if content.startswith("画"):
+            if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
+                #admin_msg = f'@{wx_name}\n您是尊贵的管理员/超级管理员，本次对话不扣除积分'
+                #self.wcf.send_text(msg=admin_msg, receiver=msg.roomid, aters=msg.sender)
+                save_path =  self.Ams.get_aidraw(question=self.handle_atMsg(msg, at_user_lists=at_user_lists))
+                if 'Pic_Cache' in save_path:
+                    self.wcf.send_image(path=save_path, receiver=msg.roomid)
             else:
-                send_msg = f'@{wx_name} 积分不足, 请求管理员或其它群友给你施舍点'
-                self.wcf.send_text(msg=send_msg, receiver=msg.roomid, aters=msg.sender)
+                if self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name) >= int(
+                        self.AiDraw_Point):
+                    self.Dps.del_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,
+                                    point=int(self.AiDraw_Point))
+                    now_point = self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid,
+                                                     room_name=room_name, )
+                    point_msg = f'@{wx_name} 您使用了Ai绘图功能，扣除您 {self.AiDraw_Point} 点积分,\n当前剩余积分: {now_point}'
+                    self.wcf.send_text(msg=point_msg, receiver=msg.roomid, aters=msg.sender)
+                    
+                    save_path =  self.Ams.get_aidraw(question=self.handle_atMsg(msg, at_user_lists=at_user_lists))
+                    if 'Pic_Cache' in save_path:
+                        self.wcf.send_image(path=save_path, receiver=msg.roomid)                    
+                else:
+                    send_msg = f'@{wx_name} 积分不足, 请求管理员或其它群友给你施舍点'
+                    self.wcf.send_text(msg=send_msg, receiver=msg.roomid, aters=msg.sender)    
+        else:                
+            if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
+                #admin_msg = f'@{wx_name}\n您是尊贵的管理员/超级管理员，本次对话不扣除积分'
+                #self.wcf.send_text(msg=admin_msg, receiver=msg.roomid, aters=msg.sender)
+                use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)
+                self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
+            # 不是管理员
+            else:
+                if self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name) >= int(
+                        self.Ai_Point):
+                    self.Dps.del_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,
+                                    point=int(self.Ai_Point))
+                    # now_point = self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid,
+                    #                                  room_name=room_name, )
+                    #point_msg = f'@{wx_name} 您使用了Ai对话功能，扣除您 {self.Ai_Point} 点积分,\n当前剩余积分: {now_point}'
+                    #self.wcf.send_text(msg=point_msg, receiver=msg.roomid, aters=msg.sender)
+                    use_msg = f'@{wx_name}\n' + self.Ams.get_ai(
+                        question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)
+                    self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
+                else:
+                    send_msg = f'@{wx_name} 积分不足, 请求管理员或其它群友给你施舍点'
+                    self.wcf.send_text(msg=send_msg, receiver=msg.roomid, aters=msg.sender)
 
     # Md5查询
     def get_md5(self, msg):
