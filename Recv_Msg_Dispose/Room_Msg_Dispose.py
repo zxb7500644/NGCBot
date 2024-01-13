@@ -321,8 +321,9 @@ class Room_Msg_Dispose:
             OutPut.outPut(f'[+]: 转录语音')
             audiofile = self.wcf.get_audio_msg(msg.id,save_path,timeout=10)
             OutPut.outPut(audiofile)
+            voicetext = ""
             if audiofile:
-                self.Ams.get_aitext(audiofile)
+                voicetext = self.Ams.get_aitext(audiofile)
             
         # 签到功能
         if msg.content.strip() == '签到':
@@ -355,6 +356,9 @@ class Room_Msg_Dispose:
             Thread(target=self.query_point, name="积分查询", args=(msg,)).start()
         # Ai对话
         elif self.wcf.self_wxid in at_user_lists and '所有人' not in msg.content:
+            Thread(target=self.get_ai, name="Ai对话", args=(msg, at_user_lists)).start()
+        elif voicetext != "":
+            msg.content = voicetext
             Thread(target=self.get_ai, name="Ai对话", args=(msg, at_user_lists)).start()
 
     # 积分查询
