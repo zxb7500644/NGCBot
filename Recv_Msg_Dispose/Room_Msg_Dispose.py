@@ -462,6 +462,7 @@ class Room_Msg_Dispose:
             content = self.handle_atMsg(msg, at_user_lists=at_user_lists)
         else:
             content = voicetext.strip()
+            OutPut.outPut(content)
 
         if content.startswith("画"):
             if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
