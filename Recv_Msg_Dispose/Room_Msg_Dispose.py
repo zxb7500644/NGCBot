@@ -847,6 +847,7 @@ class Room_Msg_Dispose:
             content = msg.content
             for wx_id in at_user_lists:
                 content = content.replace('@' + self.wcf.get_alias_in_chatroom(roomid=msg.roomid, wxid=wx_id), '')
+                OutPut.outPut(content)
             return content.strip()
 
     # 关键词判断
