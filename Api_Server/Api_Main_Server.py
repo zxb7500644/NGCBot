@@ -104,7 +104,7 @@ class Api_Main_Server:
             query = {
                 "model": "tts-1-hd",
                 "input": prompt,
-                "voice":"alloy",
+                "voice":"nova",
                 "response_format":"mp3",
                 "speed":1,
             }
