@@ -321,6 +321,8 @@ class Room_Msg_Dispose:
             OutPut.outPut(f'[+]: 转录语音')
             audiofile = self.wcf.get_audio_msg(msg.id,save_path,timeout=10)
             OutPut.outPut(audiofile)
+            if audiofile:
+                self.Ams.get_aitext(audiofile)
             
         # 签到功能
         if msg.content.strip() == '签到':

@@ -79,6 +79,7 @@ class Api_Main_Server:
         self.OpenAi_Api = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAi_Api']
         self.OpenAiDraw_Api = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAiDraw_Api']
         self.OpenAiSpeech_Api = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAiSpeech_Api']
+        self.OpenAiText_Api = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAiText_Api']
         self.OpenAi_Key = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAi_Key']
         self.OpenAi_Initiating_Message = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAi_Role']
         self.messages = [{"role": "system", "content": f"{self.OpenAi_Initiating_Message}"}]
@@ -94,6 +95,20 @@ class Api_Main_Server:
             OutPut.outPut(f'[-]: 千帆模型未配置，请修改配置文件已启用模型！！！')
 
     # Ai功能
+    def get_aitext(self,voicepath):
+        OutPut.outPut("[*]: 正在调用Ai音频转文本频接口... ...")
+        headers = {
+            "Authorization": f"{self.OpenAi_Key}",
+            "Content-Type":"multipart/form-data",
+        }
+        files = {
+            "file": f'{voicepath}',
+            "model": "whisper-1",
+        }
+        
+        response = requests.post(url=self.OpenAiText_Api, headers=headers, files=files)
+        OutPut.outPut(response)
+        
     def get_aispeech(self,question):
         OutPut.outPut("[*]: 正在调用Ai文本转音频接口... ...")
         

@@ -310,6 +310,8 @@ Api_Server:
       OpenAiDraw_Api: 'https://apivip.aiproxy.io/v1/images/generations'
       # Open_AiSpeech
       OpenAiSpeech_Api: 'https://apivip.aiproxy.io/v1/audio/speech'
+      # Open_AiText
+      OpenAiText_Api: 'https://apivip.aiproxy.io/v1/audio/transcriptions'
       # OpenAi Key
       OpenAi_Key: 'Bearer sk-nUjCjv6aExgHzmBgw44tTv8hm3EqbJQfFa94rj8JH9Jhphk9'
       # 初始化OpenAi角色
