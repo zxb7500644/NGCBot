@@ -319,7 +319,7 @@ class Room_Msg_Dispose:
         if msg.type == 34:
             save_path = self.Cache_path + '/Pic_Cache/'
             OutPut.outPut(f'[+]: 转录语音')
-            audiofile = self.wcf.get_audio_msg(msg.id,save_path)
+            audiofile = self.wcf.get_audio_msg(msg.id,save_path,timeout=10)
             OutPut.outPut(audiofile)
             
         # 签到功能
