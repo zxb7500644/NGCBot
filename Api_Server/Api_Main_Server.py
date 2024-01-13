@@ -257,7 +257,7 @@ class Api_Main_Server:
                 "Authorization": f"{self.OpenAi_Key}",
             }
             try:
-                resp = requests.post(url=self.OpenAi_Api, headers=headers, json=data, timeout=15)
+                resp = requests.post(url=self.OpenAi_Api, headers=headers, json=data, timeout=120)
                 json_data = resp.json()
                 assistant_content = json_data['choices'][0]['message']['content']
                 self.messages.append({"role": "assistant", "content": f"{assistant_content}"})
