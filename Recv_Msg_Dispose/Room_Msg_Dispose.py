@@ -316,14 +316,16 @@ class Room_Msg_Dispose:
 
     # 积分功能
     def Point_Function(self, msg, at_user_lists):
+        isVoice = False
         if msg.type == 34:
-            save_path = self.Cache_path + '/Pic_Cache/'
-            OutPut.outPut(f'[+]: 转录语音')
-            audiofile = self.wcf.get_audio_msg(msg.id,save_path,timeout=10)
-            OutPut.outPut(audiofile)
-            voicetext = ""
-            if audiofile:
-                voicetext = self.Ams.get_aitext(audiofile)
+            isVoice = True
+            # save_path = self.Cache_path + '/Pic_Cache/'
+            # OutPut.outPut(f'[+]: 转录语音')
+            # audiofile = self.wcf.get_audio_msg(msg.id,save_path,timeout=10)
+            # OutPut.outPut(audiofile)
+            # voicetext = ""
+            # if audiofile:
+            #     voicetext = self.Ams.get_aitext(audiofile)
             
         # 签到功能
         if msg.content.strip() == '签到':
@@ -357,8 +359,7 @@ class Room_Msg_Dispose:
         # Ai对话
         elif self.wcf.self_wxid in at_user_lists and '所有人' not in msg.content:
             Thread(target=self.get_ai, name="Ai对话", args=(msg, at_user_lists)).start()
-        elif voicetext != "":
-            msg.content = voicetext
+        elif isVoice:
             Thread(target=self.get_ai, name="Ai对话", args=(msg, at_user_lists)).start()
 
     # 积分查询
@@ -444,10 +445,25 @@ class Room_Msg_Dispose:
 
     # Ai对话
     def get_ai(self, msg, at_user_lists):
+        voicetext = ""        
+        if msg.type == 34:
+            save_path = self.Cache_path + '/Pic_Cache/'
+            OutPut.outPut(f'[+]: 转录语音')
+            audiofile = self.wcf.get_audio_msg(msg.id,save_path,timeout=10)
+            OutPut.outPut(audiofile)
+            if audiofile:
+                voicetext = self.Ams.get_aitext(audiofile)
+            
         admin_dicts = self.Dms.show_admins(wx_id=msg.sender, room_id=msg.roomid)
         room_name = self.Dms.query_room_name(room_id=msg.roomid)
         wx_name = self.wcf.get_alias_in_chatroom(wxid=msg.sender, roomid=msg.roomid)
-        content = self.handle_atMsg(msg, at_user_lists=at_user_lists)
+        
+        if voicetext == "":
+            content = self.handle_atMsg(msg, at_user_lists=at_user_lists)
+        else:
+            content = voicetext
+            msg.content = voicetext
+            
         if content.startswith("画"):
             if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
                 #admin_msg = f'@{wx_name}\n您是尊贵的管理员/超级管理员，本次对话不扣除积分'
