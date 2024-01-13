@@ -452,7 +452,7 @@ class Room_Msg_Dispose:
             audiofile = self.wcf.get_audio_msg(msg.id,save_path,timeout=10)
             OutPut.outPut(audiofile)
             if audiofile:
-                voicetext = self.Ams.get_aitext(audiofile)
+                voicetext = self.Ams.get_aitext(audiofile).get('text')
             
         admin_dicts = self.Dms.show_admins(wx_id=msg.sender, room_id=msg.roomid)
         room_name = self.Dms.query_room_name(room_id=msg.roomid)

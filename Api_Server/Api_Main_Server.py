@@ -108,7 +108,7 @@ class Api_Main_Server:
         response = requests.post(url=self.OpenAiText_Api, headers=headers, files=files,timeout=120)
         if response.status_code == 200:
             OutPut.outPut("[*]: 调用Ai音频转文本频接口成功")
-            return response.text
+            return response.json()
         else:
             OutPut.outPut("[*]: 调用Ai音频转文本频接口失败")
             return None
