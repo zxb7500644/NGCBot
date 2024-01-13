@@ -132,6 +132,8 @@ Point_Config:
     Ai_point: '10'
     # Ai画图积分配置
     AiDraw_point: '50'
+    # Ai音频积分配置
+    AiSpeech_point: '50'    
   # 增加积分关键词
   Add_Point_Word:
     - '加'
@@ -240,7 +242,7 @@ Function_Key_Word:
     - '情感花园'
   # 触发星座运势
   XingZuo_Word:
-    - '星座运势'                      
+    - '星座运势'                         
   # 触发微步IP查询关键词
   ThreatBook_Word:
     - 'ip查询'
@@ -306,6 +308,8 @@ Api_Server:
       OpenAi_Api: 'https://apivip.aiproxy.io/v1/chat/completions'
       # Open_AiDraw接口
       OpenAiDraw_Api: 'https://apivip.aiproxy.io/v1/images/generations'
+      # Open_AiSpeech
+      OpenAiSpeech_Api: 'https://apivip.aiproxy.io/v1/audio/speech'
       # OpenAi Key
       OpenAi_Key: 'Bearer sk-nUjCjv6aExgHzmBgw44tTv8hm3EqbJQfFa94rj8JH9Jhphk9'
       # 初始化OpenAi角色

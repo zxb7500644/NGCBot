@@ -1,3 +1,4 @@
+import json
 import Api_Server.SparkApi as SparkApi
 from urllib.parse import urljoin
 from OutPut import OutPut
@@ -77,6 +78,7 @@ class Api_Main_Server:
         # OpenAi配置
         self.OpenAi_Api = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAi_Api']
         self.OpenAiDraw_Api = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAiDraw_Api']
+        self.OpenAiSpeech_Api = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAiSpeech_Api']
         self.OpenAi_Key = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAi_Key']
         self.OpenAi_Initiating_Message = config['Api_Server']['Ai_Config']['Open_Ai']['OpenAi_Role']
         self.messages = [{"role": "system", "content": f"{self.OpenAi_Initiating_Message}"}]
@@ -92,6 +94,50 @@ class Api_Main_Server:
             OutPut.outPut(f'[-]: 千帆模型未配置，请修改配置文件已启用模型！！！')
 
     # Ai功能
+    def get_aispeech(self,question):
+        OutPut.outPut("[*]: 正在调用Ai文本转音频接口... ...")
+        
+        def getGptSpeech(content):
+            promptTemp =  f'{content}'
+            promptReal = promptTemp.split(' ')[-1]           
+            prompt = promptReal.strip()
+            query = {
+                "model": "tts-1-hd",
+                "input": prompt,
+                "voice":"alloy",
+                "response_format":"mp3",
+                "speed":1,
+            }
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"{self.OpenAi_Key}",
+            }
+            
+            save_path = self.Cache_path + '/Pic_Cache/' + str(int(time.time() * 1000)) + '.mp3'                               
+            response = requests.post(url=self.OpenAiSpeech_Api, data=json.dumps(query), headers=headers,timeout=300)
+            max_retries = 3 
+            for attempt in range(1, max_retries + 1):
+                try:
+                    response = requests.post(url=self.OpenAiSpeech_Api, data=json.dumps(query), headers=headers,timeout=300).content
+                    with open(file=save_path, mode='wb') as pd:
+                        pd.write(response)
+                    if os.path.exists(save_path):
+                        OutPut.outPut('音频下载成功')
+                        return save_path                                  
+                except Exception as e:
+                    if attempt < max_retries:
+                        OutPut.outPut('音频下载失败等待5s重试')                               
+                        # 等待一段时间后重试
+                        time.sleep(5)  # 适当的等待时间
+                    else:
+                        OutPut.outPut('音频下载失败')
+            return None
+        
+        gpt_speech = getGptSpeech(content=question)
+        if gpt_speech:
+            OutPut.outPut('[+]: Ai文本转音频接口调用成功！！！')
+            return gpt_speech
+
     def get_aidraw(self,question):
         OutPut.outPut("[*]: 正在调用Ai绘图接口... ...")
         

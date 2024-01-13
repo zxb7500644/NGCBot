@@ -73,6 +73,7 @@ class Room_Msg_Dispose:
         self.Ip_Point = config['Point_Config']['Function_Point']['IP']
         self.Ai_Point = config['Point_Config']['Function_Point']['Ai_point']
         self.AiDraw_Point = config['Point_Config']['Function_Point']['AiDraw_point']
+        self.AiSpeech_Point = config['Point_Config']['Function_Point']['AiSpeech_point']
         self.Port_Scan_Point = config['Point_Config']['Function_Point']['Port_Scan']
 
     # 主消息处理
@@ -457,7 +458,38 @@ class Room_Msg_Dispose:
                         self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)                    
                 else:
                     send_msg = f'@{wx_name} 积分不足, 请求管理员或其它群友给你施舍点'
-                    self.wcf.send_text(msg=send_msg, receiver=msg.roomid, aters=msg.sender)    
+                    self.wcf.send_text(msg=send_msg, receiver=msg.roomid, aters=msg.sender)
+        elif content.startswith("文本转音频"):
+            if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
+                #admin_msg = f'@{wx_name}\n您是尊贵的管理员/超级管理员，本次对话不扣除积分'
+                #self.wcf.send_text(msg=admin_msg, receiver=msg.roomid, aters=msg.sender)
+                save_path =  self.Ams.get_aispeech(question=self.handle_atMsg(msg, at_user_lists=at_user_lists))
+                # if 'Pic_Cache' in save_path:
+                if os.path.exists(save_path):
+                    self.wcf.send_file(path=save_path, receiver=msg.roomid)
+                else:
+                    use_msg = f'@{wx_name}\n' + 'Ai文本转音频失败'
+                    self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
+            else:
+                if self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name) >= int(
+                        self.AiSpeech_Point):
+                    self.Dps.del_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,
+                                    point=int(self.AiSpeech_Point))
+                    now_point = self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid,
+                                                     room_name=room_name, )
+                    point_msg = f'@{wx_name} 您使用了Ai文本转音频功能，扣除您 {self.AiSpeech_Point} 点积分,\n当前剩余积分: {now_point}'
+                    self.wcf.send_text(msg=point_msg, receiver=msg.roomid, aters=msg.sender)
+                    
+                    save_path =  self.Ams.get_aispeech(question=self.handle_atMsg(msg, at_user_lists=at_user_lists))
+                    # if 'Pic_Cache' in save_path:
+                    if os.path.exists(save_path):                       
+                        self.wcf.send_file(path=save_path, receiver=msg.roomid)
+                    else:
+                        use_msg = f'@{wx_name}\n' + 'Ai文本转音频失败'
+                        self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)                    
+                else:
+                    send_msg = f'@{wx_name} 积分不足, 请求管理员或其它群友给你施舍点'
+                    self.wcf.send_text(msg=send_msg, receiver=msg.roomid, aters=msg.sender)
         else:                
             if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
                 #admin_msg = f'@{wx_name}\n您是尊贵的管理员/超级管理员，本次对话不扣除积分'
