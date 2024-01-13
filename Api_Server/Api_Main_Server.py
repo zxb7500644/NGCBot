@@ -163,6 +163,7 @@ class Api_Main_Server:
         def getGptDraw(content):
             promptTemp =  f'{content}'
             promptReal = promptTemp.replace('画', '').strip()
+            promptReal = promptTemp.replace('畫', '').strip()
             prompt = promptReal.strip()
             size = "1024x1024"
             quality = "standard"
