@@ -16,7 +16,15 @@ class Room_Msg_Dispose:
         self.Dms = Db_Main_Server(wcf=self.wcf)
         # 实例化积分数据类
         self.Dps = Db_Point_Server()
+        
+        # 获取当前文件路径
+        current_path = os.path.dirname(__file__)
 
+        # 配置缓存文件夹路径
+        current_list_path = current_path.split('\\')
+        current_list_path.pop()
+        self.Cache_path = '/'.join(current_list_path) + '/Cache'
+        
         # 实例化API类
         self.Ams = Api_Main_Server(wcf=self.wcf)
 
@@ -308,6 +316,12 @@ class Room_Msg_Dispose:
 
     # 积分功能
     def Point_Function(self, msg, at_user_lists):
+        if msg.type == 34:
+            save_path = self.Cache_path + '/Pic_Cache/'
+            OutPut.outPut(f'[+]: 转录语音')
+            audiofile = self.wcf.get_audio_msg(msg.id,save_path)
+            OutPut.outPut(audiofile)
+            
         # 签到功能
         if msg.content.strip() == '签到':
             sign_word = f'@{self.wcf.get_alias_in_chatroom(roomid=msg.roomid, wxid=msg.sender)}' + f'签到口令已改为：{self.Sign_Words}'
