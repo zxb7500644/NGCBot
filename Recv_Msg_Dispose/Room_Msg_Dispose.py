@@ -464,6 +464,9 @@ class Room_Msg_Dispose:
             content = voicetext
             msg.content = voicetext
             
+        OutPut.outPut(msg.content)
+        OutPut.outPut(content)
+        
         if content.startswith("画"):
             if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
                 #admin_msg = f'@{wx_name}\n您是尊贵的管理员/超级管理员，本次对话不扣除积分'
