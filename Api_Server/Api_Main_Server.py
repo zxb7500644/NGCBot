@@ -99,16 +99,20 @@ class Api_Main_Server:
         OutPut.outPut("[*]: 正在调用Ai音频转文本频接口... ...")
         headers = {
             "Authorization": f"{self.OpenAi_Key}",
-            "Content-Type":"multipart/form-data",
         }
         files = {
-            "file": f'{voicepath}',
-            "model": "whisper-1",
+            'file': (os.path.basename(f'{voicepath}'), open(f'{voicepath}', "rb"),'audo/mpeg'),
+            "model": (None, 'whisper-1'),
         }
-        
-        response = requests.post(url=self.OpenAiText_Api, headers=headers, files=files)
-        OutPut.outPut(response)
-        
+
+        response = requests.post(url=self.OpenAiText_Api, headers=headers, files=files,timeout=120)
+        if response.status_code == 200:
+            OutPut.outPut("[*]: 调用Ai音频转文本频接口成功")
+            return response.text
+        else:
+            OutPut.outPut("[*]: 调用Ai音频转文本频接口失败")
+            return None
+                    
     def get_aispeech(self,question):
         OutPut.outPut("[*]: 正在调用Ai文本转音频接口... ...")
         
