@@ -394,7 +394,7 @@ class Room_Msg_Dispose:
         if ' ' in content:
             num = content.split(' ')[-1]
         if not num:
-            send_msg = f"[爱心] ———— 怪盗Bot功能菜单 ———— [爱心]\n[庆祝]【一、积分功能】\n[庆祝]【1.1】、微步威胁IP查询\n[庆祝]【1.2】、端口查询\n[庆祝]【1.3】、MD5查询[烟花]\n[庆祝]【1.4】、Ai对话(Gpt&星火模型&千帆模型)\n\n可在群内发送信息【WHOIS查询 qq.com】不需要@本Bot哦\n\n[烟花]【二、娱乐功能】\n" \
+            send_msg = f"[爱心] ———— 怪盗Bot功能菜单 ———— [爱心]\n[庆祝]【一、积分功能】\n[庆祝]【1.1】、微步威胁IP查询\n[庆祝]【1.2】、端口查询\n[庆祝]【1.3】、MD5查询[烟花]\n[庆祝]【1.4】、Ai对话(Gpt模型)\n[庆祝]【1.5】、Ai绘图(dall-e-3模型)\n[庆祝]【1.6】、Ai文本转音频(tts-1-hd模型)\n[庆祝]【1.7】、Ai语音识别(whisper-1模型)\n\n可在群内发送信息【WHOIS查询 qq.com】不需要@本Bot哦\n\n[烟花]【二、娱乐功能】\n" \
                        f"[烟花]【2.1】、美女图片\n[烟花]【2.2】、美女视频\n[烟花]【2.3】、舔狗日记\n[烟花]【2.4】、摸鱼日历\n[烟花]【2.5】、星座查询\n[庆祝]【2.6】、KFC伤感文案\n[庆祝]【2.7】、手机号归属地查询\n[庆祝]【2.8】、WHOIS信息查询\n" \
                        f"[烟花]【2.9】、备案查询\n[烟花]【3.0】、天气查询\n[烟花]【3.1】、油价查询\n[烟花]【3.2】、周公解梦\n[烟花]【3.3】、明星八卦\n[烟花]【3.4】、内涵段子\n[烟花]【3.5】、新闻简报\n[烟花]【3.6】、情感花园\n[烟花]【3.7】、星座运势\n\n您可以在群内发送消息【查询运势 白羊座】进行查询【其它功能类似】，或@本Bot进行AI对话哦\n\n需要调出帮助菜单，回复【help】即可\n" \
                        f"回复【help 2.1】可获取相应功能帮助[跳跳]，其它功能帮助以此类推[爱心]\n" \
@@ -407,6 +407,12 @@ class Room_Msg_Dispose:
             send_msg = '[庆祝]【1.3】、MD5查询功能帮助\n\n[爱心]命令：【MD5查询 MD5密文】'
         elif num == '1.4':
             send_msg = '[庆祝]【1.4】、Ai对话功能帮助\n\n[爱心]命令：【@机器人进行Ai对话】'
+        elif num == '1.5':
+            send_msg = '[庆祝]【1.5】、Ai绘图功能帮助\n\n[爱心]命令：【@机器人 以"画"开头】'
+        elif num == '1.6':
+            send_msg = '[庆祝]【1.6】、Ai文本转音频功能帮助\n\n[爱心]命令：【@机器人 文本转音频 内容】'
+        elif num == '1.7':
+            send_msg = '[庆祝]【1.7】、Ai语音识别功能帮助\n\n[爱心]命令：【隐藏功能限时免费开放，发送语音可实现1.4、1.5、1.6的功能】'
         elif num == '2.1':
             send_msg = '[烟花]【2.1】、美女图片功能帮助\n\n[爱心]命令：【图片】【美女图片】'
         elif num == '2.2':
@@ -480,13 +486,15 @@ class Room_Msg_Dispose:
                     self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
             else:
                 if self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name) >= int(
-                        self.AiDraw_Point):
-                    self.Dps.del_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,
-                                    point=int(self.AiDraw_Point))
-                    now_point = self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid,
-                                                     room_name=room_name, )
-                    point_msg = f'@{wx_name} 您使用了Ai绘图功能，扣除您 {self.AiDraw_Point} 点积分,\n当前剩余积分: {now_point}'
-                    self.wcf.send_text(msg=point_msg, receiver=msg.roomid, aters=msg.sender)
+                        self.AiDraw_Point) or voicetext != "":
+                    
+                    if voicetext == "":
+                        self.Dps.del_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,
+                                        point=int(self.AiDraw_Point))
+                        now_point = self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid,
+                                                        room_name=room_name, )
+                        point_msg = f'@{wx_name} 您使用了Ai绘图功能，扣除您 {self.AiDraw_Point} 点积分,\n当前剩余积分: {now_point}'
+                        self.wcf.send_text(msg=point_msg, receiver=msg.roomid, aters=msg.sender)
                     
                     if voicetext != "":
                         save_path =  self.Ams.get_aidraw(question=voicetext)
@@ -519,13 +527,15 @@ class Room_Msg_Dispose:
                     self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
             else:
                 if self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name) >= int(
-                        self.AiSpeech_Point):
-                    self.Dps.del_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,
-                                    point=int(self.AiSpeech_Point))
-                    now_point = self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid,
-                                                     room_name=room_name, )
-                    point_msg = f'@{wx_name} 您使用了Ai文本转音频功能，扣除您 {self.AiSpeech_Point} 点积分,\n当前剩余积分: {now_point}'
-                    self.wcf.send_text(msg=point_msg, receiver=msg.roomid, aters=msg.sender)
+                        self.AiSpeech_Point) or voicetext != "":
+                    
+                    if voicetext == "":
+                        self.Dps.del_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,
+                                        point=int(self.AiSpeech_Point))
+                        now_point = self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid,
+                                                        room_name=room_name, )
+                        point_msg = f'@{wx_name} 您使用了Ai文本转音频功能，扣除您 {self.AiSpeech_Point} 点积分,\n当前剩余积分: {now_point}'
+                        self.wcf.send_text(msg=point_msg, receiver=msg.roomid, aters=msg.sender)
                     
                     if voicetext != "":
                         save_path =  self.Ams.get_aispeech(question=voicetext)
@@ -553,9 +563,11 @@ class Room_Msg_Dispose:
             # 不是管理员
             else:
                 if self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name) >= int(
-                        self.Ai_Point):
-                    self.Dps.del_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,
-                                    point=int(self.Ai_Point))
+                        self.Ai_Point) or voicetext != "":
+                    
+                    if voicetext == "":
+                        self.Dps.del_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,
+                                        point=int(self.Ai_Point))
                     # now_point = self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid,
                     #                                  room_name=room_name, )
                     #point_msg = f'@{wx_name} 您使用了Ai对话功能，扣除您 {self.Ai_Point} 点积分,\n当前剩余积分: {now_point}'
