@@ -556,10 +556,30 @@ class Room_Msg_Dispose:
                 #admin_msg = f'@{wx_name}\n您是尊贵的管理员/超级管理员，本次对话不扣除积分'
                 #self.wcf.send_text(msg=admin_msg, receiver=msg.roomid, aters=msg.sender)
                 if voicetext != "":
-                    use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=voicetext,wx_id=msg.sender)
-                else:                    
-                    use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)
-                self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
+                    if "语音回复" in voicetext:
+                        use_msg = self.Ams.get_ai(question=voicetext,wx_id=msg.sender)
+                        save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
+                        if os.path.exists(save_path):                       
+                            self.wcf.send_file(path=save_path, receiver=msg.roomid)
+                        else:
+                            use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
+                            self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
+                    else:                    
+                        use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=voicetext,wx_id=msg.sender)
+                        self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)                        
+                else:
+                    text = self.handle_atMsg(msg, at_user_lists=at_user_lists)
+                    if "语音回复" in text:
+                        use_msg = self.Ams.get_ai(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)
+                        save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
+                        if os.path.exists(save_path):                       
+                            self.wcf.send_file(path=save_path, receiver=msg.roomid)
+                        else:
+                            use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
+                            self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
+                    else:
+                        use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)                        
+                        self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
             # 不是管理员
             else:
                 if self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name) >= int(
@@ -573,11 +593,31 @@ class Room_Msg_Dispose:
                     #point_msg = f'@{wx_name} 您使用了Ai对话功能，扣除您 {self.Ai_Point} 点积分,\n当前剩余积分: {now_point}'
                     #self.wcf.send_text(msg=point_msg, receiver=msg.roomid, aters=msg.sender)
                     if voicetext != "":
-                        use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=voicetext,wx_id=msg.sender)
+                        if "语音回复" in voicetext:
+                            use_msg = self.Ams.get_ai(question=voicetext,wx_id=msg.sender)
+                            save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
+                            if os.path.exists(save_path):                       
+                                self.wcf.send_file(path=save_path, receiver=msg.roomid)
+                            else:
+                                use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
+                                self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
+                        else:                    
+                            use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=voicetext,wx_id=msg.sender)
+                            self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)     
                     else:
-                        use_msg = f'@{wx_name}\n' + self.Ams.get_ai(
-                            question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)
-                    self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
+                        text = self.handle_atMsg(msg, at_user_lists=at_user_lists)
+                        if "语音回复" in text:
+                            use_msg = self.Ams.get_ai(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)
+                            save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
+                            if os.path.exists(save_path):                       
+                                self.wcf.send_file(path=save_path, receiver=msg.roomid)
+                            else:
+                                use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
+                                self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
+                        else:
+                            use_msg = f'@{wx_name}\n' + self.Ams.get_ai(
+                                question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)
+                            self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
                 else:
                     send_msg = f'@{wx_name} 积分不足, 请求管理员或其它群友给你施舍点'
                     self.wcf.send_text(msg=send_msg, receiver=msg.roomid, aters=msg.sender)

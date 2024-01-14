@@ -113,12 +113,15 @@ class Api_Main_Server:
             OutPut.outPut("[*]: 调用Ai音频转文本频接口失败")
             return None
                     
-    def get_aispeech(self,question):
+    def get_aispeech(self,question,isSplit = True):
         OutPut.outPut("[*]: 正在调用Ai文本转音频接口... ...")
         
-        def getGptSpeech(content):
+        def getGptSpeech(content,isSplit):
             promptTemp =  f'{content}'
-            promptReal = promptTemp.split(' ')[-1]           
+            if isSplit:
+                promptReal = promptTemp.split(' ')[-1]
+            else:
+                promptReal = promptTemp           
             prompt = promptReal.strip()
             query = {
                 "model": "tts-1-hd",
@@ -152,7 +155,7 @@ class Api_Main_Server:
                         OutPut.outPut('音频下载失败')
             return None
         
-        gpt_speech = getGptSpeech(content=question)
+        gpt_speech = getGptSpeech(content=question,isSplit=isSplit)
         if gpt_speech:
             OutPut.outPut('[+]: Ai文本转音频接口调用成功！！！')
             return gpt_speech
@@ -309,19 +312,20 @@ class Api_Main_Server:
             OutPut.outPut('[+]: Ai对话接口调用成功！！！')
             return gpt_msg
         else:
-            try:
-                Xh_Msg = get_xh(question=question)
-            except Exception as e:
-                OutPut.outPut(f'[-]: 星火大模型出现错误，错误信息: {e}')
-                return None
-            if not Xh_Msg:
-                if not self.qf_ak:
-                    OutPut.outPut(f'[-]: 千帆模型接口未配置，其它模型出现错误，请查看日志！')
-                    return '千帆模型接口未配置，其它模型出现错误，请查看日志！'
-                return get_qf(quest=question)
-            else:
-                OutPut.outPut('[+]: Ai对话接口调用成功！！！')
-                return Xh_Msg
+            return 'Ai对话出现错误，请查看日志！'
+            # try:
+            #     Xh_Msg = get_xh(question=question)
+            # except Exception as e:
+            #     OutPut.outPut(f'[-]: 星火大模型出现错误，错误信息: {e}')
+            #     return None
+            # if not Xh_Msg:
+            #     if not self.qf_ak:
+            #         OutPut.outPut(f'[-]: 千帆模型接口未配置，其它模型出现错误，请查看日志！')
+            #         return '千帆模型接口未配置，其它模型出现错误，请查看日志！'
+            #     return get_qf(quest=question)
+            # else:
+            #     OutPut.outPut('[+]: Ai对话接口调用成功！！！')
+            #     return Xh_Msg
 
     # 美女图片
     def get_girl_pic(self):
