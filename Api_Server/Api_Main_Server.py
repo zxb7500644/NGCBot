@@ -254,7 +254,7 @@ class Api_Main_Server:
         def getGpt(content,wx_id):
             self.messages.append({"role": "user", "content": f'{content}'})
             data = {
-                "model": "gpt-4-1106-preview",
+                "model": "gpt-4o",
                 # "model": "claude-2",
                 "messages": self.messages,
                 "session_id":f'{wx_id}',
