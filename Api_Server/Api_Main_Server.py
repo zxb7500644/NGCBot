@@ -323,6 +323,7 @@ class Api_Main_Server:
             self.messages.append({"role": "user", "content": f'{content}'})
             base64 = self.Dmp.query_base64(wx_id, room_id)
             if base64 != "":
+                self.messages = [{"role": "user", "content": [{"type": "text", "text": content}]}]
                 image_message = {
                     "type": "image_url",
                     "image_url": {"url": f"data:image/jpeg;base64,{base64}"}
