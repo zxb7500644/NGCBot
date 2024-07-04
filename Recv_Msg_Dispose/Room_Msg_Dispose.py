@@ -320,8 +320,11 @@ class Room_Msg_Dispose:
     # 积分功能
     def Point_Function(self, msg, at_user_lists):
         isVoice = False
+        isImage = False
         if msg.type == 34:
             isVoice = True
+        if msg.type == 3:
+            isImage = True
             # save_path = self.Cache_path + '/Pic_Cache/'
             # OutPut.outPut(f'[+]: 转录语音')
             # audiofile = self.wcf.get_audio_msg(msg.id,save_path,timeout=10)
@@ -363,6 +366,8 @@ class Room_Msg_Dispose:
         elif self.wcf.self_wxid in at_user_lists and '所有人' not in msg.content:
             Thread(target=self.get_ai, name="Ai对话", args=(msg, at_user_lists)).start()
         elif isVoice:
+            Thread(target=self.get_ai, name="Ai对话", args=(msg, at_user_lists)).start()
+        elif isImage:
             Thread(target=self.get_ai, name="Ai对话", args=(msg, at_user_lists)).start()
 
     # 积分查询
@@ -457,8 +462,9 @@ class Room_Msg_Dispose:
     # Ai对话
     def get_ai(self, msg, at_user_lists):
         voicetext = ""
-        OutPut.outPut(f'[+]: 消息类型：')   
-        OutPut.outPut(msg.type)     
+        OutPut.outPut(f'[+]: 消息类型：')
+        msg_type_str = str(msg.type)
+        OutPut.outPut(msg_type_str)
         if msg.type == 34:
             save_path = self.Cache_path + '/Pic_Cache/'
             OutPut.outPut(f'[+]: 转录语音')
