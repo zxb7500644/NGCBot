@@ -277,7 +277,9 @@ class Api_Main_Server:
             resp = requests.post(url=self.OpenAi_Api, headers=headers, json=data, timeout=120)
             json_data = resp.json()
             OutPut.outPut(f'[+]: 解析图片5')
+            OutPut.outPut(resp)
             assistant_content = json_data['choices'][0]['message']['content']
+            OutPut.outPut(f'[+]: 解析图片6')
             self.messages.append({"role": "assistant", "content": f"{assistant_content}"})
             if len(self.messages) == 15:
                 self.messages = [{"role": "system", "content": f"{self.OpenAi_Initiating_Message}"}]
