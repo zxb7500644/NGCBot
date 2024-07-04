@@ -201,7 +201,7 @@ class Room_Msg_Dispose:
         Thread(target=self.Point_Function, name="积分功能", args=(msg, at_user_lists,)).start()
 
     # 娱乐功能
-    def Happy_Function(self, msg):
+    def Happy_Function(self, msg):       
         # 美女图片
         if self.judge_keyword(keyword=self.Pic_Words, msg=msg.content, list_bool=True, equal_bool=True):
             save_path = self.Ams.get_girl_pic()
@@ -316,15 +316,61 @@ class Room_Msg_Dispose:
             Thread(target=self.get_MoYu, name="摸鱼英雄榜", args=(msg,)).start()
         # 自定义回复
         Thread(target=self.custom_get, name="自定义回复", args=(msg,)).start()
+    
+    def Format(self,f):
+        """
+        计算异或值
+        各图片头部信息
+        jpeg：ff d8 ff
+        png：89 50 4e 47
+        gif： 47 49 46 38
+        """
+        a = [(0x89, 0x50, 0x4e), (0x47, 0x49, 0x46), (0xff, 0xd8, 0xff)]
+        try:
+            with open(f, "rb") as dat_r:
+                now = dat_r.read(3)  # 读取前三个字节
+                for xor in a:
+                    res = [now[i] ^ xor[i] for i in range(3)]
+                    if res[0] == res[1] == res[2]:  # 三次异或值相等 说明就是那种格式
+                        return res[0]  # 返回异或值
+        except Exception as e:
+            print(f"Error determining format for file {f}: {e}")
+        return 0  # 默认返回0以防万一 
+    
+    def imageDecode(self,f, target_path):   
+        try:
+            with open(f, "rb") as dat_read:
+                fn = os.path.basename(f).rsplit('.', 1)[0]  # 获取文件名，不包括扩展名
+                xo = self.Format(f)  # 判断图片格式 并计算返回异或值
+                out = os.path.join(target_path, fn + ".jpg")  # 图片输出路径
+                print("文件输出路径{}".format(out), end='\n\n')
+
+                with open(out, "wb") as png_write:
+                    dat_read.seek(0)  # 重置文件指针位置
+                    for now in dat_read:  # 循环字节
+                        for nowByte in now:
+                            newByte = nowByte ^ xo  # 转码计算
+                            png_write.write(bytes([newByte]))  # 转码后重新写入
+
+                return out  # 返回生成的jpg文件路径
+        except Exception as e:
+            print(f"Error processing file {f}: {e}")
+            return None
 
     # 积分功能
     def Point_Function(self, msg, at_user_lists):
         isVoice = False
-        isImage = False
+        # isImage = False
         if msg.type == 34:
             isVoice = True
         if msg.type == 3:
-            isImage = True
+            imgePath = msg.extra
+            save_path = self.Cache_path + '/Pic_Cache/'
+            jpg_file_path = self.imageDecode(imgePath, save_path)
+            if jpg_file_path:
+                print(f"转换完成，生成的 JPG 文件路径为: {jpg_file_path}")
+            result = self.Dmp.update_imagePath(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,image_path=jpg_file_path)
+            OutPut.outPut(result)
             # save_path = self.Cache_path + '/Pic_Cache/'
             # OutPut.outPut(f'[+]: 转录语音')
             # audiofile = self.wcf.get_audio_msg(msg.id,save_path,timeout=10)
@@ -367,8 +413,8 @@ class Room_Msg_Dispose:
             Thread(target=self.get_ai, name="Ai对话", args=(msg, at_user_lists)).start()
         elif isVoice:
             Thread(target=self.get_ai, name="Ai对话", args=(msg, at_user_lists)).start()
-        elif isImage:
-            Thread(target=self.get_ai, name="Ai对话", args=(msg, at_user_lists)).start()
+        # elif isImage:
+        #     Thread(target=self.get_ai, name="Ai对话", args=(msg, at_user_lists)).start()
 
     # 积分查询
     def query_point(self, msg):
@@ -483,11 +529,11 @@ class Room_Msg_Dispose:
             content = voicetext.strip()
             OutPut.outPut(content)
             
-        if msg.type == 3:
-            imgePath = msg.extra
-            OutPut.outPut(f'[+]: 获得图片地址')
-            result = self.Dmp.update_imagePath(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,image_path=imgePath)
-            OutPut.outPut(result)
+        # if msg.type == 3:
+        #     imgePath = msg.extra
+        #     OutPut.outPut(f'[+]: 获得图片地址')
+        #     result = self.Dmp.update_imagePath(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,image_path=imgePath)
+        #     OutPut.outPut(result)
             
         if content.startswith("画") or content.startswith("畫"):
             if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
