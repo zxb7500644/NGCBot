@@ -233,20 +233,23 @@ class Api_Main_Server:
         if gpt_image:
             OutPut.outPut('[+]: Ai绘图接口调用成功！！！')
             return gpt_image
-
+    
+    def encode_image_to_base64(self,image):
+        buffered = io.BytesIO()
+        image.save(buffered, format=image.format)
+        return base64.b64encode(buffered.getvalue()).decode('utf-8')
+    
     def get_aiAnalyzeImage(self,question,imagePath,wx_id):
         
-        def encode_image_to_base64(image):
-            buffered = io.BytesIO()
-            image.save(buffered, format=image.format)
-            return base64.b64encode(buffered.getvalue()).decode('utf-8')
-    
         OutPut.outPut("[*]: 正在调用Ai分析图片接口... ...")
         self.messages = [{"role": "user", "content": [{"type": "text", "text": question}]}]
-    
+        OutPut.outPut(imagePath)
         if imagePath is not None:
+            OutPut.outPut(f'[+]: 解析图片1')
             image = Image.open(imagePath)
-            base64_image = encode_image_to_base64(image)
+            OutPut.outPut(f'[+]: 解析图片2')
+            base64_image = self.encode_image_to_base64(image)
+            OutPut.outPut(base64_image)
             image_message = {
                 "type": "image_url",
                 "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
