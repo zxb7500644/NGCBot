@@ -456,7 +456,9 @@ class Room_Msg_Dispose:
 
     # Ai对话
     def get_ai(self, msg, at_user_lists):
-        voicetext = ""        
+        voicetext = ""
+        OutPut.outPut(f'[+]: 消息类型：')   
+        OutPut.outPut(msg.type)     
         if msg.type == 34:
             save_path = self.Cache_path + '/Pic_Cache/'
             OutPut.outPut(f'[+]: 转录语音')
