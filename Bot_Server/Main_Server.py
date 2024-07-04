@@ -4,6 +4,7 @@ from Push_Server.Push_Main_Server import Push_Main_Server
 from Cache.Cache_Main_Server import Cache_Main_Server
 from Db_Server.Db_Point_Server import Db_Point_Server
 from Db_Server.Db_Main_Server import Db_Main_Server
+from Db_Server.Db_ImagePath_Server import Db_ImagePath_Server
 import xml.etree.ElementTree as ET
 from threading import Thread
 from cprint import cprint
@@ -34,7 +35,10 @@ class Main_Server:
         self.Dms.db_init()
         # 实例化积分数据类并初始化
         self.Dps = Db_Point_Server()
-        self.Dps.db_init()
+        self.Dps.db_init()        
+        # 实例化图片地址数据类并初始化
+        self.Dmp = Db_ImagePath_Server()
+        self.Dmp.db_init()
         Thread(target=self.Dms.query_all_users, name="获取所有的联系人").start()
 
         # 实例化定时推送类

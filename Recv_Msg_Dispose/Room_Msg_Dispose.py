@@ -1,6 +1,7 @@
 from Api_Server.Api_Main_Server import Api_Main_Server
 from Db_Server.Db_Point_Server import Db_Point_Server
 from Db_Server.Db_Main_Server import Db_Main_Server
+from Db_Server.Db_ImagePath_Server import Db_ImagePath_Server
 import xml.etree.ElementTree as ET
 from threading import Thread
 from OutPut import OutPut
@@ -16,6 +17,8 @@ class Room_Msg_Dispose:
         self.Dms = Db_Main_Server(wcf=self.wcf)
         # 实例化积分数据类
         self.Dps = Db_Point_Server()
+        # 实例化图片地址数据类
+        self.Dmp = Db_ImagePath_Server()
         
         # 获取当前文件路径
         current_path = os.path.dirname(__file__)
@@ -471,7 +474,13 @@ class Room_Msg_Dispose:
         else:
             content = voicetext.strip()
             OutPut.outPut(content)
-
+            
+        if msg.type == 3:
+            imgePath = msg.extra
+            OutPut.outPut(f'[+]: 获得图片地址')
+            result = self.Dmp.update_imagePath(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,image_path=imgePath)
+            OutPut.outPut(result)
+            
         if content.startswith("画") or content.startswith("畫"):
             if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
                 #admin_msg = f'@{wx_name}\n您是尊贵的管理员/超级管理员，本次对话不扣除积分'
@@ -553,6 +562,74 @@ class Room_Msg_Dispose:
                 else:
                     send_msg = f'@{wx_name} 积分不足, 请求管理员或其它群友给你施舍点'
                     self.wcf.send_text(msg=send_msg, receiver=msg.roomid, aters=msg.sender)
+        elif content.startswith("分析图片"):
+            imageLastPath = self.Dmp.query_imagePath(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name)
+            if imageLastPath != "":
+                if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
+                    if voicetext != "":
+                        if "语音回复" in voicetext:
+                            voicetextReal = voicetext.replace('语音回复', '').strip()
+                            use_msg = self.Ams.get_aiAnalyzeImage(question=voicetextReal,imagePath=imageLastPath,wx_id=msg.sender)
+                            save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
+                            if os.path.exists(save_path):                       
+                                self.wcf.send_file(path=save_path, receiver=msg.roomid)
+                            else:
+                                use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
+                                self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
+                        else:                    
+                            use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=voicetext,imagePath=imageLastPath,wx_id=msg.sender)
+                            self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)                           
+                    else:
+                        text = self.handle_atMsg(msg, at_user_lists=at_user_lists)
+                        if "语音回复" in text:
+                            textReal = text.replace('语音回复', '').strip()
+                            use_msg = self.Ams.get_aiAnalyzeImage(question=textReal,imagePath=imageLastPath,wx_id=msg.sender)
+                            save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
+                            if os.path.exists(save_path):                       
+                                self.wcf.send_file(path=save_path, receiver=msg.roomid)
+                            else:
+                                use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
+                                self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
+                        else:
+                            use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),imagePath=imageLastPath,wx_id=msg.sender)                        
+                            self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
+                else:
+                    if self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name) >= int(
+                        self.Ai_Point) or voicetext != "":
+                        
+                        if voicetext == "":
+                            self.Dps.del_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,
+                                            point=int(self.Ai_Point))
+                        if voicetext != "":
+                            if "语音回复" in voicetext:
+                                voicetextReal = voicetext.replace('语音回复', '').strip()
+                                use_msg = self.Ams.get_aiAnalyzeImage(question=voicetextReal,imagePath=imageLastPath,wx_id=msg.sender)
+                                save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
+                                if os.path.exists(save_path):                       
+                                    self.wcf.send_file(path=save_path, receiver=msg.roomid)
+                                else:
+                                    use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
+                                    self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
+                            else:                    
+                                use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=voicetext,imagePath=imageLastPath,wx_id=msg.sender)
+                                self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)                           
+                        else:
+                            text = self.handle_atMsg(msg, at_user_lists=at_user_lists)
+                            if "语音回复" in text:
+                                textReal = text.replace('语音回复', '').strip()
+                                use_msg = self.Ams.get_aiAnalyzeImage(question=textReal,imagePath=imageLastPath,wx_id=msg.sender)
+                                save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
+                                if os.path.exists(save_path):                       
+                                    self.wcf.send_file(path=save_path, receiver=msg.roomid)
+                                else:
+                                    use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
+                                    self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
+                            else:
+                                use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),imagePath=imageLastPath,wx_id=msg.sender)                        
+                                self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)    
+                    else:
+                        send_msg = f'@{wx_name} 积分不足, 请求管理员或其它群友给你施舍点'
+                        self.wcf.send_text(msg=send_msg, receiver=msg.roomid, aters=msg.sender)        
         else:                
             if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
                 #admin_msg = f'@{wx_name}\n您是尊贵的管理员/超级管理员，本次对话不扣除积分'

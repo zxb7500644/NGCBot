@@ -13,6 +13,9 @@ import yaml
 import time
 import os
 import httpx
+import base64
+from PIL import Image
+import io
 
 
 class Api_Main_Server:
@@ -95,6 +98,11 @@ class Api_Main_Server:
             OutPut.outPut(f'[-]: 千帆模型未配置，请修改配置文件已启用模型！！！')
 
     # Ai功能
+    def encode_image_to_base64(image):
+        buffered = io.BytesIO()
+        image.save(buffered, format=image.format)
+        return base64.b64encode(buffered.getvalue()).decode('utf-8')
+
     def get_aitext(self,voicepath):
         OutPut.outPut("[*]: 正在调用Ai音频转文本频接口... ...")
         headers = {
@@ -226,6 +234,49 @@ class Api_Main_Server:
             OutPut.outPut('[+]: Ai绘图接口调用成功！！！')
             return gpt_image
 
+    def get_aiAnalyzeImage(self,question,imagePath,wx_id):
+        
+        def encode_image_to_base64(image):
+            buffered = io.BytesIO()
+            image.save(buffered, format=image.format)
+            return base64.b64encode(buffered.getvalue()).decode('utf-8')
+    
+        OutPut.outPut("[*]: 正在调用Ai分析图片接口... ...")
+        messages = [{"role": "user", "content": [{"type": "text", "text": question}]}]
+    
+        if imagePath is not None:
+            image = Image.open(imagePath)
+            base64_image = encode_image_to_base64(image)
+            image_message = {
+                "type": "image_url",
+                "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
+            }
+            messages[0]["content"].append(image_message)
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.OpenAi_Key}'
+        }
+        
+        data = {
+        "model": "gpt-4o",
+        "messages": messages,
+        "session_id":f'{wx_id}',
+        "seeion_limit":5
+        }
+        try:
+            resp = requests.post(url=self.OpenAi_Api, headers=headers, json=data, timeout=120)
+            json_data = resp.json()
+            assistant_content = json_data['choices'][0]['message']['content']
+            self.messages.append({"role": "assistant", "content": f"{assistant_content}"})
+            if len(self.messages) == 15:
+                self.messages = [{"role": "system", "content": f"{self.OpenAi_Initiating_Message}"}]
+            return assistant_content
+        except Exception as e:
+            OutPut.outPut(f'[-]: AI对话接口出现错误，错误信息： {e}')
+            self.messages = [{"role": "system", "content": f"{self.OpenAi_Initiating_Message}"}]
+            return None
+    
     def get_ai(self, question,wx_id):
         OutPut.outPut("[*]: 正在调用Ai对话接口... ...")
         send_msgs = []
