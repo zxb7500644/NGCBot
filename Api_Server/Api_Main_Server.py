@@ -266,7 +266,7 @@ class Api_Main_Server:
         
         data = {
         "model": "gpt-4o",
-        "messages": self.messages,
+        "messages": messages,
         "session_id":f'{wx_id}',
         "seeion_limit":5
         }
