@@ -242,7 +242,7 @@ class Api_Main_Server:
     def get_aiAnalyzeImage(self,question,imagePath,wx_id):
         
         OutPut.outPut("[*]: 正在调用Ai分析图片接口... ...")
-        messages = [{"role": "user", "content": [{"type": "text", "text": question}]}]
+        self.messages = [{"role": "user", "content": [{"type": "text", "text": question}]}]
         OutPut.outPut(imagePath)
         if imagePath is not None:
             # OutPut.outPut(f'[+]: 解析图片1')
@@ -254,8 +254,8 @@ class Api_Main_Server:
                 "type": "image_url",
                 "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
             }
-            OutPut.outPut(f'[+]: 解析图片1')
-            messages[0]["content"].append(image_message)
+            # OutPut.outPut(f'[+]: 解析图片1')
+            self.messages[1]["content"].append(image_message)
             OutPut.outPut(f'[+]: 解析图片2')
 
         OutPut.outPut(f'[+]: 解析图片3')
@@ -266,16 +266,17 @@ class Api_Main_Server:
         
         data = {
         "model": "gpt-4o",
-        "messages": messages,
+        "messages": self.messages,
         "session_id":f'{wx_id}',
         "seeion_limit":5
         }
         OutPut.outPut(f'[+]: 解析图片4')
         data_str = json.dumps(data)
-        OutPut.outPut(data_str)      
+        # OutPut.outPut(data_str)      
         try:
             resp = requests.post(url=self.OpenAi_Api, headers=headers, json=data, timeout=120)
             json_data = resp.json()
+            OutPut.outPut(f'[+]: 解析图片5')
             assistant_content = json_data['choices'][0]['message']['content']
             self.messages.append({"role": "assistant", "content": f"{assistant_content}"})
             if len(self.messages) == 15:
