@@ -8,6 +8,7 @@ from OutPut import OutPut
 import yaml
 import os
 import re
+import time
 
 
 class Room_Msg_Dispose:
@@ -511,6 +512,20 @@ class Room_Msg_Dispose:
             send_msg = '[烟花]【3.7】、星座运势功能帮助\n\n[爱心]命令：【星座运势】'                                                            
         self.wcf.send_text(msg=send_msg, receiver=msg.roomid)
 
+    def get_image_path_with_retries(self,wx_id, wx_name, room_id, room_name, max_retries=15, delay=2):
+        retries = 0
+        imageLastPath = ""
+
+        while retries < max_retries:
+            if imageLastPath:
+                break
+            imageLastPath = self.Dmp.query_imagePath(wx_id=wx_id, wx_name=wx_name, room_id=room_id, room_name=room_name)
+            if imageLastPath:
+                break
+            retries += 1
+            time.sleep(delay)
+        return imageLastPath
+
     # Ai对话
     def get_ai(self, msg, at_user_lists):
         voicetext = ""
@@ -623,9 +638,10 @@ class Room_Msg_Dispose:
                     send_msg = f'@{wx_name} 积分不足, 请求管理员或其它群友给你施舍点'
                     self.wcf.send_text(msg=send_msg, receiver=msg.roomid, aters=msg.sender)
         elif content.startswith("分析图片"):
-            imageLastPath = self.Dmp.query_imagePath(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name)
+            # imageLastPath = self.Dmp.query_imagePath(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name)
+            imageLastPath = self.get_image_path_with_retries(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name)
             OutPut.outPut(f'[+]: 图片地址：')
-            OutPut.outPut(imageLastPath)
+            OutPut.outPut(imageLastPath)               
             if imageLastPath != "":
                 if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
                     if voicetext != "":
@@ -655,6 +671,7 @@ class Room_Msg_Dispose:
                         else:
                             use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),imagePath=imageLastPath,wx_id=msg.sender)                        
                             self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
+                    self.Dmp.update_imagePath(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,image_path="")
                 else:
                     if self.Dps.query_point(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name) >= int(
                         self.Ai_Point) or voicetext != "":
@@ -688,7 +705,8 @@ class Room_Msg_Dispose:
                                     self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
                             else:
                                 use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),imagePath=imageLastPath,wx_id=msg.sender)                        
-                                self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)    
+                                self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
+                        self.Dmp.update_imagePath(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,image_path="")                           
                     else:
                         send_msg = f'@{wx_name} 积分不足, 请求管理员或其它群友给你施舍点'
                         self.wcf.send_text(msg=send_msg, receiver=msg.roomid, aters=msg.sender)        
