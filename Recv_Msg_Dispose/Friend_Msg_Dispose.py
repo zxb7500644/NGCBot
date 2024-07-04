@@ -53,7 +53,7 @@ class Friend_Msg_Dispose:
     # Ai对话实现
     def get_ai(self, msg):
         if self.Ai_Lock or msg.sender in self.Administrators:
-            ai_msg = self.Ams.get_ai(question=msg.content.strip(),wx_id=msg.sender)
+            ai_msg = self.Ams.get_ai(question=msg.content.strip(),wx_id=msg.sender,room_id="")
             print(ai_msg)
             self.wcf.send_text(msg=ai_msg, receiver=msg.sender)
 

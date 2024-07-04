@@ -647,7 +647,7 @@ class Room_Msg_Dispose:
                     if voicetext != "":
                         if "语音回复" in voicetext:
                             voicetextReal = voicetext.replace('语音回复', '').strip()
-                            use_msg = self.Ams.get_aiAnalyzeImage(question=voicetextReal,imagePath=imageLastPath,wx_id=msg.sender)
+                            use_msg = self.Ams.get_aiAnalyzeImage(question=voicetextReal,imagePath=imageLastPath,wx_id=msg.sender,room_id=msg.roomid)
                             save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
                             if os.path.exists(save_path):                       
                                 self.wcf.send_file(path=save_path, receiver=msg.roomid)
@@ -655,13 +655,13 @@ class Room_Msg_Dispose:
                                 use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
                                 self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
                         else:                    
-                            use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=voicetext,imagePath=imageLastPath,wx_id=msg.sender)
+                            use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=voicetext,imagePath=imageLastPath,wx_id=msg.sender,room_id=msg.roomid)
                             self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)                           
                     else:
                         text = self.handle_atMsg(msg, at_user_lists=at_user_lists)
                         if "语音回复" in text:
                             textReal = text.replace('语音回复', '').strip()
-                            use_msg = self.Ams.get_aiAnalyzeImage(question=textReal,imagePath=imageLastPath,wx_id=msg.sender)
+                            use_msg = self.Ams.get_aiAnalyzeImage(question=textReal,imagePath=imageLastPath,wx_id=msg.sender,room_id=msg.roomid)
                             save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
                             if os.path.exists(save_path):                       
                                 self.wcf.send_file(path=save_path, receiver=msg.roomid)
@@ -669,7 +669,7 @@ class Room_Msg_Dispose:
                                 use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
                                 self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
                         else:
-                            use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),imagePath=imageLastPath,wx_id=msg.sender)                        
+                            use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),imagePath=imageLastPath,wx_id=msg.sender,room_id=msg.roomid)                        
                             self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
                     self.Dmp.update_imagePath(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,image_path="")
                 else:
@@ -682,7 +682,7 @@ class Room_Msg_Dispose:
                         if voicetext != "":
                             if "语音回复" in voicetext:
                                 voicetextReal = voicetext.replace('语音回复', '').strip()
-                                use_msg = self.Ams.get_aiAnalyzeImage(question=voicetextReal,imagePath=imageLastPath,wx_id=msg.sender)
+                                use_msg = self.Ams.get_aiAnalyzeImage(question=voicetextReal,imagePath=imageLastPath,wx_id=msg.sender,room_id=msg.roomid)
                                 save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
                                 if os.path.exists(save_path):                       
                                     self.wcf.send_file(path=save_path, receiver=msg.roomid)
@@ -690,13 +690,13 @@ class Room_Msg_Dispose:
                                     use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
                                     self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
                             else:                    
-                                use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=voicetext,imagePath=imageLastPath,wx_id=msg.sender)
+                                use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=voicetext,imagePath=imageLastPath,wx_id=msg.sender,room_id=msg.roomid)
                                 self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)                           
                         else:
                             text = self.handle_atMsg(msg, at_user_lists=at_user_lists)
                             if "语音回复" in text:
                                 textReal = text.replace('语音回复', '').strip()
-                                use_msg = self.Ams.get_aiAnalyzeImage(question=textReal,imagePath=imageLastPath,wx_id=msg.sender)
+                                use_msg = self.Ams.get_aiAnalyzeImage(question=textReal,imagePath=imageLastPath,wx_id=msg.sender,room_id=msg.roomid)
                                 save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
                                 if os.path.exists(save_path):                       
                                     self.wcf.send_file(path=save_path, receiver=msg.roomid)
@@ -704,7 +704,7 @@ class Room_Msg_Dispose:
                                     use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
                                     self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
                             else:
-                                use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),imagePath=imageLastPath,wx_id=msg.sender)                        
+                                use_msg = f'@{wx_name}\n' + self.Ams.get_aiAnalyzeImage(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),imagePath=imageLastPath,wx_id=msg.sender,room_id=msg.roomid)                        
                                 self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
                         self.Dmp.update_imagePath(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,image_path="")                           
                     else:
@@ -717,7 +717,7 @@ class Room_Msg_Dispose:
                 if voicetext != "":
                     if "语音回复" in voicetext:
                         voicetextReal = voicetext.replace('语音回复', '').strip()
-                        use_msg = self.Ams.get_ai(question=voicetextReal,wx_id=msg.sender)
+                        use_msg = self.Ams.get_ai(question=voicetextReal,wx_id=msg.sender,room_id=msg.roomid)
                         save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
                         if os.path.exists(save_path):                       
                             self.wcf.send_file(path=save_path, receiver=msg.roomid)
@@ -725,13 +725,13 @@ class Room_Msg_Dispose:
                             use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
                             self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
                     else:                    
-                        use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=voicetext,wx_id=msg.sender)
+                        use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=voicetext,wx_id=msg.sender,room_id=msg.roomid)
                         self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)                        
                 else:
                     text = self.handle_atMsg(msg, at_user_lists=at_user_lists)
                     if "语音回复" in text:
                         textReal = text.replace('语音回复', '').strip()
-                        use_msg = self.Ams.get_ai(question=textReal,wx_id=msg.sender)
+                        use_msg = self.Ams.get_ai(question=textReal,wx_id=msg.sender,room_id=msg.roomid)
                         save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
                         if os.path.exists(save_path):                       
                             self.wcf.send_file(path=save_path, receiver=msg.roomid)
@@ -739,7 +739,7 @@ class Room_Msg_Dispose:
                             use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
                             self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
                     else:
-                        use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)                        
+                        use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender,room_id=msg.roomid)                        
                         self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
             # 不是管理员
             else:
@@ -756,7 +756,7 @@ class Room_Msg_Dispose:
                     if voicetext != "":
                         if "语音回复" in voicetext:
                             voicetextReal = voicetext.replace('语音回复', '').strip()                            
-                            use_msg = self.Ams.get_ai(question=voicetextReal,wx_id=msg.sender)
+                            use_msg = self.Ams.get_ai(question=voicetextReal,wx_id=msg.sender,room_id=msg.roomid)
                             save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
                             if os.path.exists(save_path):                       
                                 self.wcf.send_file(path=save_path, receiver=msg.roomid)
@@ -764,13 +764,13 @@ class Room_Msg_Dispose:
                                 use_msg = f'@{wx_name}\n' + 'Ai语音对话失败'
                                 self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
                         else:                    
-                            use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=voicetext,wx_id=msg.sender)
+                            use_msg = f'@{wx_name}\n' + self.Ams.get_ai(question=voicetext,wx_id=msg.sender,room_id=msg.roomid)
                             self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)     
                     else:
                         text = self.handle_atMsg(msg, at_user_lists=at_user_lists)
                         if "语音回复" in text:
                             textReal = text.replace('语音回复', '').strip()
-                            use_msg = self.Ams.get_ai(question=textReal,wx_id=msg.sender)
+                            use_msg = self.Ams.get_ai(question=textReal,wx_id=msg.sender,room_id=msg.roomid)
                             save_path =  self.Ams.get_aispeech(question=use_msg,isSplit=False)
                             if os.path.exists(save_path):                       
                                 self.wcf.send_file(path=save_path, receiver=msg.roomid)
@@ -779,7 +779,7 @@ class Room_Msg_Dispose:
                                 self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender) 
                         else:
                             use_msg = f'@{wx_name}\n' + self.Ams.get_ai(
-                                question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender)
+                                question=self.handle_atMsg(msg, at_user_lists=at_user_lists),wx_id=msg.sender,room_id=msg.roomid)
                             self.wcf.send_text(msg=use_msg, receiver=msg.roomid, aters=msg.sender)
                 else:
                     send_msg = f'@{wx_name} 积分不足, 请求管理员或其它群友给你施舍点'

@@ -16,7 +16,7 @@ import httpx
 import base64
 from PIL import Image
 import io
-
+from Db_Server.Db_ImagePath_Server import Db_ImagePath_Server
 
 class Api_Main_Server:
     def __init__(self, wcf):
@@ -33,6 +33,10 @@ class Api_Main_Server:
             "Cache-Control": "no-cache",
             "Connection": "close",  # 解决Max retries exceeded with url报错
         }
+        
+        # 实例化图片地址数据类
+        self.Dmp = Db_ImagePath_Server()
+        
         # 忽略HTTPS告警
         urllib3.disable_warnings()
         # 获取当前文件路径
@@ -239,7 +243,7 @@ class Api_Main_Server:
         image.save(buffered, format=image.format)
         return base64.b64encode(buffered.getvalue()).decode('utf-8')
     
-    def get_aiAnalyzeImage(self,question,imagePath,wx_id):
+    def get_aiAnalyzeImage(self,question,imagePath,wx_id,room_id):
         
         OutPut.outPut("[*]: 正在调用Ai分析图片接口... ...")
         self.messages = [{"role": "user", "content": [{"type": "text", "text": question}]}]
@@ -256,6 +260,7 @@ class Api_Main_Server:
             }
             # OutPut.outPut(f'[+]: 解析图片1')
             self.messages[0]["content"].append(image_message)
+            self.Dmp.update_base64(wx_id, room_id,base64_image)
             # OutPut.outPut(f'[+]: 解析图片2')
 
         # OutPut.outPut(f'[+]: 解析图片3')
@@ -289,7 +294,7 @@ class Api_Main_Server:
             self.messages = [{"role": "system", "content": f"{self.OpenAi_Initiating_Message}"}]
             return None
     
-    def get_ai(self, question,wx_id):
+    def get_ai(self, question,wx_id,room_id):
         OutPut.outPut("[*]: 正在调用Ai对话接口... ...")
         send_msgs = []
 
@@ -314,8 +319,16 @@ class Api_Main_Server:
             return text
 
         # Gpt模型
-        def getGpt(content,wx_id):
+        def getGpt(content,wx_id,room_id):
             self.messages.append({"role": "user", "content": f'{content}'})
+            base64 = self.Dmp.query_base64(wx_id, room_id)
+            if base64 != "":
+                image_message = {
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/jpeg;base64,{base64}"}
+                }
+                self.messages[0]["content"].append(image_message)
+
             data = {
                 "model": "gpt-4o",
                 # "model": "claude-2",
@@ -370,7 +383,7 @@ class Api_Main_Server:
                 OutPut.outPut(f'[-]: 千帆大模型出现错误，错误信息: {e}')
                 return None
 
-        gpt_msg = getGpt(content=question,wx_id=wx_id)
+        gpt_msg = getGpt(content=question,wx_id=wx_id,room_id=room_id)
         if gpt_msg:
             OutPut.outPut('[+]: Ai对话接口调用成功！！！')
             return gpt_msg

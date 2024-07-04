@@ -33,7 +33,8 @@ class Db_ImagePath_Server:
             wx_name TEXT,
             room_id TEXT,
             room_name TEXT,
-            imagePath TEXT
+            imagePath TEXT,
+            base64 TEXT
         );
         '''
         # 执行SQL语句
@@ -94,4 +95,28 @@ class Db_ImagePath_Server:
         else:
             self.add_user(wx_id=wx_id, wx_name=wx_name, room_id=room_id, room_name=room_name, image_path=image_path)
             msg = f'用户不存在，已添加新用户并设置图片地址为: {image_path}'
+        return msg
+
+    def query_base64(self, wx_id, room_id):
+        """查询当前用户的图片地址。"""
+        base64 = ""
+        if self.judge_user(wx_id=wx_id, room_id=room_id):
+            conn, cursor = self.open_db()
+            query_base64_sql = '''SELECT base64 FROM image WHERE wx_id = ? AND room_id = ?'''
+            cursor.execute(query_base64_sql, (wx_id, room_id))
+            data = cursor.fetchone()
+            base64 = data[0] if data else None
+            self.close_db(conn, cursor)
+        return base64
+    
+    def update_base64(self, wx_id, room_id, base64):
+        """更新用户的图片地址。"""
+        msg = ""
+        if self.judge_user(wx_id=wx_id, room_id=room_id):
+            conn, cursor = self.open_db()
+            update_base64_sql = '''UPDATE image SET base64 = ? WHERE wx_id = ? AND room_id = ?'''
+            cursor.execute(update_base64_sql, (base64, wx_id, room_id))
+            conn.commit()
+            self.close_db(conn, cursor)
+            msg = f'您的base64已更新为: {base64}'
         return msg
