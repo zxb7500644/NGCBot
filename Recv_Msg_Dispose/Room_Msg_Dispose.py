@@ -364,13 +364,19 @@ class Room_Msg_Dispose:
         if msg.type == 34:
             isVoice = True
         if msg.type == 3:
-            imgePath = msg.extra
+            wx_name = self.wcf.get_alias_in_chatroom(roomid=msg.roomid, wxid=msg.sender)
+            room_name = self.Dms.query_room_name(room_id=msg.roomid)
+            imgePath = msg.extra           
             save_path = self.Cache_path + '/Pic_Cache/'
-            jpg_file_path = self.imageDecode(imgePath, save_path)
+            jpg_file_path = self.wcf.download_image(msg.id,imgePath,save_path,timeout=30)
+            
+            # jpg_file_path = self.imageDecode(imgePath, save_path)
             if jpg_file_path:
                 print(f"转换完成，生成的 JPG 文件路径为: {jpg_file_path}")
             result = self.Dmp.update_imagePath(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name,image_path=jpg_file_path)
             OutPut.outPut(result)
+            
+            
             # save_path = self.Cache_path + '/Pic_Cache/'
             # OutPut.outPut(f'[+]: 转录语音')
             # audiofile = self.wcf.get_audio_msg(msg.id,save_path,timeout=10)
