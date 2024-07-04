@@ -242,7 +242,7 @@ class Api_Main_Server:
     def get_aiAnalyzeImage(self,question,imagePath,wx_id):
         
         OutPut.outPut("[*]: 正在调用Ai分析图片接口... ...")
-        self.messages = [{"role": "user", "content": [{"type": "text", "text": question}]}]
+        messages = [{"role": "user", "content": [{"type": "text", "text": question}]}]
         OutPut.outPut(imagePath)
         if imagePath is not None:
             # OutPut.outPut(f'[+]: 解析图片1')
@@ -254,9 +254,11 @@ class Api_Main_Server:
                 "type": "image_url",
                 "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
             }
-            self.messages[1]["content"].append(image_message)
+            OutPut.outPut(f'[+]: 解析图片1')
+            messages[0]["content"].append(image_message)
+            OutPut.outPut(f'[+]: 解析图片2')
 
-        OutPut.outPut(f'[+]: 解析图片1')
+        OutPut.outPut(f'[+]: 解析图片3')
         headers = {
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {self.OpenAi_Key}'
@@ -268,7 +270,7 @@ class Api_Main_Server:
         "session_id":f'{wx_id}',
         "seeion_limit":5
         }
-        OutPut.outPut(f'[+]: 解析图片2')
+        OutPut.outPut(f'[+]: 解析图片4')
         data_str = json.dumps(data)
         OutPut.outPut(data_str)      
         try:
