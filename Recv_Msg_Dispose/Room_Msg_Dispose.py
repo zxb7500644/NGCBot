@@ -624,6 +624,8 @@ class Room_Msg_Dispose:
                     self.wcf.send_text(msg=send_msg, receiver=msg.roomid, aters=msg.sender)
         elif content.startswith("分析图片"):
             imageLastPath = self.Dmp.query_imagePath(wx_id=msg.sender, wx_name=wx_name, room_id=msg.roomid, room_name=room_name)
+            OutPut.outPut(f'[+]: 图片地址：')
+            OutPut.outPut(imageLastPath)
             if imageLastPath != "":
                 if msg.sender in admin_dicts.keys() or msg.sender in self.administrators:
                     if voicetext != "":
