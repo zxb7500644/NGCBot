@@ -245,17 +245,18 @@ class Api_Main_Server:
         self.messages = [{"role": "user", "content": [{"type": "text", "text": question}]}]
         OutPut.outPut(imagePath)
         if imagePath is not None:
-            OutPut.outPut(f'[+]: 解析图片1')
+            # OutPut.outPut(f'[+]: 解析图片1')
             image = Image.open(imagePath)
-            OutPut.outPut(f'[+]: 解析图片2')
+            # OutPut.outPut(f'[+]: 解析图片2')
             base64_image = self.encode_image_to_base64(image)
-            OutPut.outPut(base64_image)
+            # OutPut.outPut(base64_image)
             image_message = {
                 "type": "image_url",
                 "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
             }
-            self.messages[0]["content"].append(image_message)
+            self.messages[1]["content"].append(image_message)
 
+        OutPut.outPut(f'[+]: 解析图片1')
         headers = {
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {self.OpenAi_Key}'
@@ -267,6 +268,9 @@ class Api_Main_Server:
         "session_id":f'{wx_id}',
         "seeion_limit":5
         }
+        OutPut.outPut(f'[+]: 解析图片2')
+        data_str = json.dumps(data)
+        OutPut.outPut(data_str)      
         try:
             resp = requests.post(url=self.OpenAi_Api, headers=headers, json=data, timeout=120)
             json_data = resp.json()
