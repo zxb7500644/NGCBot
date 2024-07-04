@@ -256,12 +256,12 @@ class Api_Main_Server:
             }
             # OutPut.outPut(f'[+]: 解析图片1')
             self.messages[0]["content"].append(image_message)
-            OutPut.outPut(f'[+]: 解析图片2')
+            # OutPut.outPut(f'[+]: 解析图片2')
 
-        OutPut.outPut(f'[+]: 解析图片3')
+        # OutPut.outPut(f'[+]: 解析图片3')
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': f'Bearer {self.OpenAi_Key}'
+            "Authorization": f"{self.OpenAi_Key}",
         }
         
         data = {
@@ -270,16 +270,16 @@ class Api_Main_Server:
         "session_id":f'{wx_id}',
         "seeion_limit":5
         }
-        OutPut.outPut(f'[+]: 解析图片4')
-        data_str = json.dumps(data)
+        # OutPut.outPut(f'[+]: 解析图片4')
+        # data_str = json.dumps(data)
         # OutPut.outPut(data_str)      
         try:
             resp = requests.post(url=self.OpenAi_Api, headers=headers, json=data, timeout=120)
             json_data = resp.json()
-            OutPut.outPut(f'[+]: 解析图片5')
-            OutPut.outPut(resp)
+            # OutPut.outPut(f'[+]: 解析图片5')
+            # OutPut.outPut(resp)
             assistant_content = json_data['choices'][0]['message']['content']
-            OutPut.outPut(f'[+]: 解析图片6')
+            # OutPut.outPut(f'[+]: 解析图片6')
             self.messages.append({"role": "assistant", "content": f"{assistant_content}"})
             if len(self.messages) == 15:
                 self.messages = [{"role": "system", "content": f"{self.OpenAi_Initiating_Message}"}]
