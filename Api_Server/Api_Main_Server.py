@@ -255,7 +255,7 @@ class Api_Main_Server:
                 "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
             }
             # OutPut.outPut(f'[+]: 解析图片1')
-            self.messages[1]["content"].append(image_message)
+            self.messages[0]["content"].append(image_message)
             OutPut.outPut(f'[+]: 解析图片2')
 
         OutPut.outPut(f'[+]: 解析图片3')
