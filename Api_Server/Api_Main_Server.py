@@ -242,7 +242,7 @@ class Api_Main_Server:
             return base64.b64encode(buffered.getvalue()).decode('utf-8')
     
         OutPut.outPut("[*]: 正在调用Ai分析图片接口... ...")
-        messages = [{"role": "user", "content": [{"type": "text", "text": question}]}]
+        self.messages = [{"role": "user", "content": [{"type": "text", "text": question}]}]
     
         if imagePath is not None:
             image = Image.open(imagePath)
@@ -251,7 +251,7 @@ class Api_Main_Server:
                 "type": "image_url",
                 "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
             }
-            messages[0]["content"].append(image_message)
+            self.messages[0]["content"].append(image_message)
 
         headers = {
             'Content-Type': 'application/json',
@@ -260,7 +260,7 @@ class Api_Main_Server:
         
         data = {
         "model": "gpt-4o",
-        "messages": messages,
+        "messages": self.messages,
         "session_id":f'{wx_id}',
         "seeion_limit":5
         }
