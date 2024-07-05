@@ -328,7 +328,12 @@ class Api_Main_Server:
                     "type": "image_url",
                     "image_url": {"url": f"data:image/jpeg;base64,{base64}"}
                 }
-                self.messages[1]["content"].append(image_message)
+                
+                try:
+                    self.messages[1]["content"].append(image_message)
+                except Exception as e:
+                    self.messages[0]["content"].append(image_message)
+                                        
             else:
                 self.messages.append({"role": "user", "content": f'{content}'})
                 
